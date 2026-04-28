@@ -1,9 +1,10 @@
-import express, { Express } from 'express';
+import express from 'express';
+import type { Express } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
-import connectDB from './database/connection.js';
+import connectDB from './database/connection';
 
 dotenv.config();
 

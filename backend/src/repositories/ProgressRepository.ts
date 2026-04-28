@@ -1,6 +1,6 @@
-import Progress from '../models/Progress.js';
-import { IProgress } from '../types/index.js';
-import { NotFoundError } from '../errors/AppError.js';
+import Progress from '../models/Progress';
+import { IProgress } from '../types';
+import { NotFoundError } from '../errors/AppError';
 
 export class ProgressRepository {
   async create(progressData: Partial<IProgress>): Promise<IProgress> {

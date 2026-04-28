@@ -1,6 +1,6 @@
-import Task from '../models/Task.js';
-import { ITask } from '../types/index.js';
-import { NotFoundError } from '../errors/AppError.js';
+import Task from '../models/Task';
+import { ITask } from '../types';
+import { NotFoundError } from '../errors/AppError';
 
 export class TaskRepository {
   async create(taskData: Partial<ITask>): Promise<ITask> {
