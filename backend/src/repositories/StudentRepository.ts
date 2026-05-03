@@ -1,6 +1,6 @@
-import Student from '../models/Student.js';
-import { IStudent } from '../types/index.js';
-import { NotFoundError } from '../errors/AppError.js';
+import Student from '../models/Student';
+import { IStudent } from '../types';
+import { NotFoundError } from '../errors/AppError';
 
 export class StudentRepository {
   async create(studentData: Partial<IStudent>): Promise<IStudent> {

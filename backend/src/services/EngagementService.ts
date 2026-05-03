@@ -1,6 +1,6 @@
-import { StudentRepository } from '../repositories/StudentRepository.js';
-import { ProgressRepository } from '../repositories/ProgressRepository.js';
-import { TaskRepository } from '../repositories/TaskRepository.js';
+import { StudentRepository } from '../repositories/StudentRepository';
+import { ProgressRepository } from '../repositories/ProgressRepository';
+import { TaskRepository } from '../repositories/TaskRepository';
 
 export class EngagementService {
   private studentRepo = new StudentRepository();
