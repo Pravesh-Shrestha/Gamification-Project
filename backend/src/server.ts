@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import connectDB from './database/connection';
+import studentRoutes from './routes/studentRoutes';
 
 dotenv.config();
 
@@ -17,7 +18,7 @@ const io = new SocketIOServer(httpServer, {
   },
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.BACKEND_PORT || 5001;
 
 // Middleware
 app.use(cors());
@@ -42,6 +43,8 @@ app.get('/api/health', (req, res) => {
     environment: process.env.NODE_ENV || 'development',
   });
 });
+
+app.use('/api/students', studentRoutes);
 
 // Socket.io connection
 io.on('connection', (socket) => {
