@@ -41,3 +41,66 @@ export interface IProgress {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface ISchool {
+  _id?: Types.ObjectId | string;
+  name: string;
+  domain?: string;
+  license?: Types.ObjectId | string;
+  adminIds?: Array<Types.ObjectId | string>;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface ILicense {
+  _id?: Types.ObjectId | string;
+  schoolId: Types.ObjectId | string;
+  maxStaff: number;
+  maxStudents: number;
+  expiresAt?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IUser {
+  _id?: Types.ObjectId | string;
+  email: string;
+  name: string;
+  role: 'superadmin' | 'school_admin' | 'staff' | 'student';
+  schoolId?: Types.ObjectId | string;
+  externalId?: string; // admin-created ID for students/staff
+  password?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface ISection {
+  _id?: Types.ObjectId | string;
+  name: string;
+  schoolId: Types.ObjectId | string;
+  staffIds: Array<Types.ObjectId | string>;
+  studentIds: Array<Types.ObjectId | string>;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IQuest {
+  _id?: Types.ObjectId | string;
+  title: string;
+  description?: string;
+  schoolId: Types.ObjectId | string;
+  authorId?: Types.ObjectId | string;
+  pointsReward?: number;
+  metadata?: Record<string, any>;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IEngagementEvent {
+  _id?: Types.ObjectId | string;
+  studentId?: Types.ObjectId | string;
+  schoolId?: Types.ObjectId | string;
+  type: string;
+  payload?: Record<string, any>;
+  createdAt?: Date;
+}

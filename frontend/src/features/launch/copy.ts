@@ -1,8 +1,8 @@
 export const loadingMessages = [
-  'Preparing your learning space',
-  'Calibrating feedback loops',
-  'Loading Academia.io',
+  'Curating a polished learning workspace',
+  'Preparing your dashboard, quests, and progress',
+  'Bringing your school data into focus',
 ];
 
 export const brandName = 'Academia.io';
-export const brandTagline = 'The New Layer of Digital Education';
+export const brandTagline = 'Modern learning, beautifully delivered';

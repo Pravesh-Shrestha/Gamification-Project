@@ -3,7 +3,8 @@ import mongoose from 'mongoose';
 
 dotenv.config();
 
-const uri = process.env.MONGODB_URI || process.env.LOCAL_MONGODB_URI;
+// Prefer an explicit MONGODB_URI when provided (useful for remote DBs); fall back to local URI
+const uri = process.env.MONGODB_URI || process.env.LOCAL_MONGODB_URI || process.env.MONGODB_URI;
 
 if (!uri) {
   console.error('No MongoDB URI found in environment variables.');
@@ -13,7 +14,7 @@ if (!uri) {
 async function run() {
   try {
     console.log('Connecting to MongoDB...');
-    await mongoose.connect(uri);
+    await mongoose.connect(uri as string);
     console.log('Connected to MongoDB:', uri);
 
     const coll = mongoose.connection.collection('students');

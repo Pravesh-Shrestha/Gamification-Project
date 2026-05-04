@@ -2,64 +2,108 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { authApi } from '@/lib/authApi';
+import { Button } from '@/components/common/Button';
+import { Input } from '@/components/common/Input';
+import { useError } from '@/hooks/errors/useError';
 
 export default function LoginForm() {
   const router = useRouter();
+  const { addError } = useError();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError(null);
-    if (!email || !password) {
-      setError('Please provide both email and password');
+    setFieldErrors({});
+
+    // Validation
+    if (!email) {
+      setFieldErrors({ email: 'Email is required' });
+      return;
+    }
+    if (!password) {
+      setFieldErrors({ password: 'Password is required' });
       return;
     }
 
-    // Demo behaviour: accept any credentials and navigate to a placeholder page.
-    // For the thesis, record failed auth attempts as research evidence as needed.
-    router.push('/dashboard');
+    setIsLoading(true);
+    const normalizedEmail = normalizeEmailForAuth(email);
+
+    authApi
+      .login({ email: normalizedEmail, password })
+      .then((result) => {
+        localStorage.setItem('user', JSON.stringify(result.user));
+        router.push('/dashboard');
+      })
+      .catch((err) => {
+        const errorMessage = err instanceof Error ? err.message : 'Unable to sign in right now. Please try again.';
+        addError(errorMessage, 'error');
+      })
+      .finally(() => setIsLoading(false));
+  }
+
+  function normalizeEmailForAuth(raw: string) {
+    try {
+      const parts = raw.split('@');
+      if (parts.length < 2) return raw;
+      const local = parts[0];
+      const domain = parts.slice(1).join('@');
+      const adminTagIndex = local.indexOf('+admin');
+      if (adminTagIndex !== -1) {
+        const newLocal = local.slice(0, adminTagIndex);
+        return `${newLocal}@${domain}`;
+      }
+      return raw;
+    } catch (e) {
+      return raw;
+    }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md">
-      <label className="block mb-3">
-        <span className="text-sm text-slate-300">Email</span>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="mt-1 w-full rounded-md border border-white/10 bg-transparent px-3 py-2 text-white placeholder:text-slate-400"
-          placeholder="student@example.com"
-        />
-      </label>
+    <form onSubmit={handleSubmit} className="w-full space-y-6">
+      <Input
+        type="email"
+        label="Email Address"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="student@example.com"
+        error={fieldErrors.email}
+        helperText="Add +admin before @ to sign in as admin (e.g. alice+admin@example.com)"
+      />
 
-      <label className="block mb-4">
-        <span className="text-sm text-slate-300">Password</span>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="mt-1 w-full rounded-md border border-white/10 bg-transparent px-3 py-2 text-white placeholder:text-slate-400"
-          placeholder="Enter your password"
-        />
-      </label>
+      <Input
+        type="password"
+        label="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Enter your password"
+        error={fieldErrors.password}
+      />
 
-      {error && <p className="mb-3 text-sm text-rose-400">{error}</p>}
-
-      <div className="flex items-center gap-3">
-        <button className="rounded-md bg-sky-400 px-4 py-2 font-semibold text-slate-900" type="submit">
+      <div className="flex flex-col gap-3">
+        <Button
+          type="submit"
+          variant="primary"
+          size="lg"
+          isLoading={isLoading}
+          className="w-full"
+        >
           Sign in
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
-          className="text-sm text-slate-300 underline"
+          variant="secondary"
+          size="lg"
           onClick={() => router.push('/')}
+          className="w-full"
         >
           Back
-        </button>
+        </Button>
       </div>
     </form>
   );
 }
+

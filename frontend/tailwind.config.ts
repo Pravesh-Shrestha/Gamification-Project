@@ -4,18 +4,56 @@ const config: Config = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
+      fontFamily: {
+        display: ['var(--font-space-grotesk), var(--font-poppins), var(--font-inter)', 'sans-serif'],
+        body: ['var(--font-inter)', 'sans-serif'],
+        sans: ['var(--font-inter)', 'sans-serif'],
+      },
       colors: {
-        ink: '#07111f',
-        panel: 'rgba(8, 15, 28, 0.74)',
-        skyGlow: '#67e8f9',
-        limeGlow: '#a3e635',
+        // Academia.io Logo Palette - Extracted from brand logo
+        primary: {
+          50: '#f0f4ff',
+          100: '#e0e9ff',
+          200: '#c1d3ff',
+          300: '#a2bdff',
+          400: '#6b93ff',
+          500: '#0052CC', // Primary Blue - strong brand color
+          600: '#0047b8',
+          700: '#003da4',
+          800: '#003290',
+          900: '#00287c',
+        },
+        accent: {
+          blue: '#0066FF',      // Secondary Blue (m from logo)
+          pink: '#FF4D94',      // Pink/Magenta (c from logo)
+          green: '#4CAF50',     // Green (a from logo)
+          orange: '#FFA500',    // Orange/Gold (d from logo)
+          red: '#FF6B6B',       // Red/Coral (e from logo)
+          purple: '#7C3AED',    // Purple (i from logo)
+        },
+        neutral: {
+          50: '#FAFAFA',
+          100: '#F5F5F5',
+          200: '#EEEEEE',
+          300: '#E0E0E0',
+          400: '#BDBDBD',
+          500: '#9E9E9E',
+          600: '#757575',
+          700: '#616161',
+          800: '#424242',
+          900: '#212121',
+        },
       },
       boxShadow: {
-        halo: '0 24px 80px rgba(15, 23, 42, 0.45)',
+        sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        md: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+        lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+        xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+        edu: '0 8px 16px -2px rgba(107, 79, 248, 0.1)',
       },
-      backgroundImage: {
-        academyRadial:
-          'radial-gradient(circle at top, rgba(72, 219, 251, 0.2), transparent 35%), linear-gradient(160deg, #07111f 0%, #0c1d33 48%, #111827 100%)',
+      borderRadius: {
+        lg: '12px',
+        xl: '16px',
       },
     },
   },
