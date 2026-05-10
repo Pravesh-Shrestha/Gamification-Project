@@ -47,3 +47,27 @@ coverage/
 .cache/
 temp/
 tmp/
+
+# Next.js cache
+.next/cache
+
+# Vercel / deployment
+.vercel/
+.now/
+
+# Parcel / bundler cache
+.parcel-cache/
+
+# pnpm store
+.pnpm-store/
+
+# Docker overrides
+docker-compose.override.yml
+
+# Local env variants (keep secrets out of VCS)
+.env.production
+.env.test
+
+# Windows thumbnails
+ehthumbs.db
+Desktop.ini
