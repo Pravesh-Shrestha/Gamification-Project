@@ -18,6 +18,12 @@ export class StudentRepository {
     return student;
   }
 
+  // Returns student including the password field (select '+password')
+  async findByEmailWithPassword(email: string): Promise<IStudent | null> {
+    const student = await Student.findOne({ email }).select('+password').lean();
+    return student;
+  }
+
   async findAll(): Promise<IStudent[]> {
     const students = await Student.find().lean();
     return students;

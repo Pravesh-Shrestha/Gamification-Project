@@ -9,6 +9,8 @@ export interface IProgressDoc extends Document {
   attempts: number;
   startedAt: Date;
   completedAt?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const progressSchema = new Schema<IProgressDoc>(

@@ -48,6 +48,31 @@ coverage/
 temp/
 tmp/
 
+# Copilot & Agent Configuration (Do not commit)
+# These files contain local development preferences and should not be versioned
+.instructions.md
+.prompt.md
+.agent.md
+SKILL.md
+copilot-instructions.md
+AGENTS.md
+**/.instructions.md
+**/.prompt.md
+**/.agent.md
+**/SKILL.md
+**/copilot-instructions.md
+**/AGENTS.md
+**/E2E_TEST_RESULTS.md
+
+# Generated markdown reports and implementation notes
+/E2E_TEST_RESULTS.md
+/IMPLEMENTATION_SUMMARY.md
+/RBAC_MIDDLEWARE_PROXY_SETUP.md
+
+# VS Code Copilot Extensions
+.vscode/copilot/
+.copilot-instructions.md
+
 # Next.js cache
 .next/cache
 
