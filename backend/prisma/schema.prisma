@@ -1,0 +1,266 @@
+// ============================================================
+// academia.io — Database Schema (Prisma + PostgreSQL)
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── School ───────────────────────────────────────────────
+// Each school is a tenant. Admins, teachers, and students
+// belong to a school (except super_admin who oversees all).
+model School {
+  id        String   @id @default(cuid())
+  name      String
+  city      String
+  color     String   @default("#3B82F6")
+  motto     String?
+  createdAt DateTime @default(now())
+
+  users  User[]
+  classes Class[]
+}
+
+// ─── User ─────────────────────────────────────────────────
+// Single table for ALL roles (super_admin, admin, teacher, student).
+// Gamification fields live directly on the user for fast reads.
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String   // bcrypt-hashed
+  name      String
+  role      String   @default("student") // super_admin | admin | teacher | student
+  avatar    String   @default("panda")
+  grade     String?
+  schoolId  String?
+  school    School?  @relation(fields: [schoolId], references: [id])
+  classId   String?
+  class     Class?   @relation(fields: [classId], references: [id])
+  createdAt DateTime @default(now())
+
+  // ── Gamification Stats ──
+  xp              Int     @default(0)
+  streak          Int     @default(0)
+  lastActiveDate  String? // "2026-06-20" — no timezone headaches
+  streakDays      String  @default("[]") // JSON array of date strings
+  perfectQuizzes  Int     @default(0)
+  focusMinutes    Int     @default(0)
+  treesGrown      Int     @default(0)
+  dailyGoal       Int     @default(50)
+  todayXp         String  @default("{}") // JSON: { "2026-06-20": 45 }
+  questsState     String  @default("{}") // JSON: { "2026-06-20": { "q_lessons2": 1 } }
+  cosmetics       String  @default("[]") // JSON array of unlocked cosmetic IDs
+  comboCount      Int     @default(0)
+
+  // ── Relations ──
+  lessonsCompleted LessonProgress[]
+  badges           UserBadge[]
+  notifications    Notification[]
+  feedEvents       FeedEvent[]
+
+  @@index([email])
+  @@index([schoolId])
+  @@index([role])
+}
+
+// ─── Badge ────────────────────────────────────────────────
+// Master list of all possible badges
+model Badge {
+  id   String @id
+  name String
+  desc String
+  icon String
+
+  assignments UserBadge[]
+}
+
+// ─── User <-> Badge (many-to-many) ──────────────────────
+model UserBadge {
+  id     String @id @default(cuid())
+  userId String
+  badgeId String
+  earnedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  badge Badge @relation(fields: [badgeId], references: [id])
+
+  @@unique([userId, badgeId])
+  @@index([userId])
+}
+
+// ─── Subject ──────────────────────────────────────────────
+model Subject {
+  id      String @id // "math", "sci", "eng"
+  name    String
+  color   String
+  icon    String
+  blurb   String
+
+  chapters Chapter[]
+}
+
+// ─── Chapter ──────────────────────────────────────────────
+model Chapter {
+  id        String @id
+  title     String
+  order     Int
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id])
+
+  lessons Lesson[]
+
+  @@index([subjectId])
+}
+
+// ─── Lesson ───────────────────────────────────────────────
+// Stores curriculum content + quiz questions in JSON fields
+model Lesson {
+  id        String @id // e.g. "m-frac-1"
+  title     String
+  mins      Int
+  order     Int
+  chapterId String
+  chapter   Chapter @relation(fields: [chapterId], references: [id])
+  subjectId String
+
+  slides String // JSON array of slide objects
+  quiz   String // JSON array of quiz questions
+
+  progress LessonProgress[]
+
+  @@index([chapterId])
+  @@index([subjectId])
+}
+
+// ─── Lesson Progress ──────────────────────────────────────
+// Tracks each student's completion of each lesson
+model LessonProgress {
+  id        String   @id @default(cuid())
+  userId    String
+  lessonId  String
+  score     Int
+  total     Int
+  perfect   Boolean  @default(false)
+  xpEarned  Int      @default(0)
+  completedAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  lesson Lesson @relation(fields: [lessonId], references: [id])
+
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([lessonId])
+}
+
+// ─── Notification ─────────────────────────────────────────
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  kind      String   // "badge" | "streak" | "quest" | "announcement" | "chatbot"
+  title     String
+  body      String?
+  link      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, read])
+}
+
+// ─── Feed Event ───────────────────────────────────────────
+// Public activity feed (for dashboard / teacher view)
+model FeedEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  kind      String   // "lesson_complete" | "badge_earned" | "streak_milestone" | "focus_complete"
+  payload   String   // JSON
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+// ─── Chat Message ─────────────────────────────────────────
+// Stores AI chatbot conversations per user
+model ChatMessage {
+  id        String   @id @default(cuid())
+  userId    String
+  role      String   // "user" | "assistant"
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+// ─── Interaction Log (ML-friendly) ────────────────────────
+// Every user action is logged for ML analysis — quiz attempts,
+// time spent, focus sessions, page views, etc.
+model InteractionLog {
+  id        String   @id @default(cuid())
+  userId    String
+  kind      String   // "quiz_attempt" | "lesson_view" | "focus_session" | "login" | "page_view"
+  metadata  String   // JSON payload with action-specific data
+  sessionId String?  // Group interactions into sessions
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([kind])
+  @@index([createdAt])
+}
+
+// ─── Uploaded Content ─────────────────────────────────────
+// Teacher-uploaded PDFs, images, and custom lesson materials
+model UploadedContent {
+  id        String   @id @default(cuid())
+  lessonId  String?  // Link to a lesson if uploaded for one
+  title     String
+  fileName  String
+  fileType  String   // "pdf" | "image" | "video" | "other"
+  fileSize  Int
+  filePath  String   // Server path or URL
+  uploadedBy String
+  schoolId  String?
+  createdAt DateTime @default(now())
+
+  @@index([lessonId])
+  @@index([uploadedBy])
+}
+
+// ─── Class ────────────────────────────────────────────────
+// School classes/groups — "Grade 1", "Grade 2", ..., "Grade 8"
+model Class {
+  id       String @id @default(cuid())
+  name     String // e.g. "Grade 6", "Grade 6A"
+  grade    Int    // 1-10 numeric grade level
+  section  String @default("A") // A, B, C etc.
+  schoolId String
+  school   School @relation(fields: [schoolId], references: [id])
+
+  users User[]
+
+  @@unique([name, schoolId])
+  @@index([schoolId])
+}
+
+// ─── Assignment ───────────────────────────────────────────
+model Assignment {
+  id         String   @id @default(cuid())
+  classId    String
+  lessonId   String
+  assignedBy String
+  assignedAt DateTime @default(now())
+  dueAt      DateTime
+  note       String?
+
+  @@index([classId])
+  @@index([lessonId])
+  @@index([assignedBy])
+}
