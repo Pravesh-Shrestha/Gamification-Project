@@ -50,6 +50,10 @@ tmp/
 
 # Copilot & Agent Configuration (Do not commit)
 # These files contain local development preferences and should not be versioned
+# Markdown Files
+*.md
+**/*.md
+!README.md
 .instructions.md
 .prompt.md
 .agent.md
