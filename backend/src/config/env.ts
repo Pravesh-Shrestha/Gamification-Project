@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Environment Configuration
+// academia.io - Environment Configuration
 // ============================================================
 
 export const ENV = {

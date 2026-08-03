@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Prisma Client Singleton (Prisma 7+)
+// academia.io - Prisma Client Singleton (Prisma 7+)
 // ============================================================
 // Uses @prisma/adapter-pg for PostgreSQL via a connection pool.
 // Avoids creating multiple Prisma clients during hot-reload.
