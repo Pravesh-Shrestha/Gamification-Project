@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Chatbot Routes
+// academia.io - Chatbot Routes
 // ============================================================
 
 import { Router } from "express";

@@ -69,7 +69,7 @@ export function bumpStreak(
 ): { streak: number; streakDays: string[]; streakBroken?: boolean } {
   const today = todayKey();
 
-  // Already active today — no change
+  // Already active today - no change
   if (lastActiveDate === today) {
     return { streak: currentStreak, streakDays };
   }
@@ -81,7 +81,7 @@ export function bumpStreak(
     // Consecutive day
     newStreak = currentStreak + 1;
   } else if (lastActiveDate && lastActiveDate !== today) {
-    // Missed a day — streak broken
+    // Missed a day - streak broken
     newStreak = 1;
     streakBroken = true;
   } else {
@@ -250,7 +250,7 @@ export async function checkNewBadges(userId: string, userData: {
   if (userData.studiedBefore9am) tryAward("early_bird");
   if (userData.studiedAfter9pm) tryAward("night_owl");
 
-  // Subject mastery badges — check against curriculum
+  // Subject mastery badges - check against curriculum
   const allLessons = await prisma.lesson.findMany();
   const completedSet = new Set(userData.lessonsCompleted);
 
@@ -290,33 +290,47 @@ export async function processLessonComplete(
   if (!user) throw new Error("User not found");
 
   const perfect = score === total;
-  const xpFromCorrect = score * XP_PER_CORRECT * xpMultiplier;
-  const xpFromLesson = XP_PER_LESSON_COMPLETE * xpMultiplier;
-  const xpPerfectBonus = perfect ? XP_PERFECT_BONUS * xpMultiplier : 0;
-  const streakBonus = user.streak >= XP_STREAK_BONUS_THRESHOLD ? 10 * xpMultiplier : 0;
-  const totalXpEarned = Math.round(xpFromCorrect + xpFromLesson + xpPerfectBonus + streakBonus);
-
-  // Evaluate quests on backend
-  const { bonusXp, updatedState, completedQuests } = await evaluateQuests(userId, user, "lesson", {
-    score,
-    total,
-    subjectId,
-    comboMax,
-    totalXpEarned,
-  });
-
-  const finalXpEarned = totalXpEarned + bonusXp;
-
-  // Update streak
-  const streakDays: string[] = JSON.parse(user.streakDays);
-  const { streak: newStreak, streakDays: newStreakDays } = bumpStreak(
-    user.lastActiveDate, user.streak, streakDays
-  );
 
   // Track lessons completed via LessonProgress table
   const progress = await prisma.lessonProgress.findUnique({
     where: { userId_lessonId: { userId, lessonId } },
   });
+  const alreadyCompleted = !!progress;
+
+  // Full XP on the FIRST completion only. Re-completing a lesson is treated as
+  // review: it keeps the streak alive but awards no XP (prevents XP farming).
+  const xpFromCorrect = score * XP_PER_CORRECT * xpMultiplier;
+  const xpFromLesson = XP_PER_LESSON_COMPLETE * xpMultiplier;
+  const xpPerfectBonus = perfect ? XP_PERFECT_BONUS * xpMultiplier : 0;
+  const streakBonus = user.streak >= XP_STREAK_BONUS_THRESHOLD ? 10 * xpMultiplier : 0;
+  const totalXpEarned = alreadyCompleted
+    ? 0
+    : Math.round(xpFromCorrect + xpFromLesson + xpPerfectBonus + streakBonus);
+
+  // Evaluate quests on backend (only on first completion)
+  let bonusXp = 0;
+  let updatedState = user.questsState;
+  let completedQuests: string[] = [];
+  if (!alreadyCompleted) {
+    const q = await evaluateQuests(userId, user, "lesson", {
+      score,
+      total,
+      subjectId,
+      comboMax,
+      totalXpEarned,
+    });
+    bonusXp = q.bonusXp;
+    updatedState = q.updatedState;
+    completedQuests = q.completedQuests;
+  }
+
+  const finalXpEarned = totalXpEarned + bonusXp;
+
+  // Update streak (always - even review practice keeps the streak alive)
+  const streakDays: string[] = JSON.parse(user.streakDays);
+  const { streak: newStreak, streakDays: newStreakDays } = bumpStreak(
+    user.lastActiveDate, user.streak, streakDays
+  );
 
   if (!progress) {
     await prisma.lessonProgress.create({
@@ -332,7 +346,7 @@ export async function processLessonComplete(
   const completedLessonIds = allProgress.map(p => p.lessonId);
 
   // Update user gamification fields
-  const perfectQuizzes = perfect ? user.perfectQuizzes + 1 : user.perfectQuizzes;
+  const perfectQuizzes = perfect && !alreadyCompleted ? user.perfectQuizzes + 1 : user.perfectQuizzes;
   const todayXp = addTodayXp(user.todayXp, finalXpEarned);
 
   await prisma.user.update({
@@ -385,6 +399,7 @@ export async function processLessonComplete(
 
   return {
     xpEarned: finalXpEarned,
+    alreadyCompleted,
     newStreak,
     perfect,
     newBadges: newBadgeIds,

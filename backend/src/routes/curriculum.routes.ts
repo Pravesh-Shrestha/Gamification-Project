@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Curriculum Routes
+// academia.io - Curriculum Routes
 // ============================================================
 
 import { Router, Response } from "express";

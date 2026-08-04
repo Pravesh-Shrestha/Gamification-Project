@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Auth & Registration Routes
+// academia.io - Auth & Registration Routes
 // ============================================================
 
 import { Router } from "express";

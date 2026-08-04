@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Auth Service
+// academia.io - Auth Service
 // ============================================================
 // Handles user registration, login, JWT token generation.
 // Passwords are hashed with bcrypt.

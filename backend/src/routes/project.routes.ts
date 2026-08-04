@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Project Research Analytics Route
+// academia.io - Project Research Analytics Route
 // Provides secured aggregated engagement & gamification
 // effectiveness data for thesis research. Only accessible by super_admin.
 // ============================================================
@@ -263,10 +263,10 @@ router.get("/", authenticate, async (req: AuthRequest, res: Response) => {
 
     // ── 7. XP Distribution (5 buckets) ───────────────────
     const xpBuckets = [
-      { label: "0–99 XP",    min: 0,    max: 99,       count: 0 },
-      { label: "100–299 XP", min: 100,  max: 299,      count: 0 },
-      { label: "300–599 XP", min: 300,  max: 599,      count: 0 },
-      { label: "600–999 XP", min: 600,  max: 999,      count: 0 },
+      { label: "0-99 XP",    min: 0,    max: 99,       count: 0 },
+      { label: "100-299 XP", min: 100,  max: 299,      count: 0 },
+      { label: "300-599 XP", min: 300,  max: 599,      count: 0 },
+      { label: "600-999 XP", min: 600,  max: 999,      count: 0 },
       { label: "1000+ XP",   min: 1000, max: Infinity, count: 0 },
     ];
     for (const s of students) {

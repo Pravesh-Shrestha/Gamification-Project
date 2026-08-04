@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Content & Subject Management Routes
+// academia.io - Content & Subject Management Routes
 // ============================================================
 
 import { Router } from "express";

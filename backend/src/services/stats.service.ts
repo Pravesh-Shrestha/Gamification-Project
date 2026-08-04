@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Stats & Performance Service
+// academia.io - Stats & Performance Service
 // ============================================================
 // Provides summary stats, leaderboards, weekly/daily
 // performance analytics for students, teachers, and admins.

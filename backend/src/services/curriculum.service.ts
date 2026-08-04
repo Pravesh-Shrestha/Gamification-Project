@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Curriculum Service
+// academia.io - Curriculum Service
 // ============================================================
 // Serves subject/chapter/lesson data from the database.
 // Tracks which lessons a student has completed.
@@ -23,7 +23,7 @@ export async function getCurriculum(userId?: string) {
               order: true,
               chapterId: true,
               subjectId: true,
-              // Exclude slides/quiz — sent separately per-lesson
+              // Exclude slides/quiz - sent separately per-lesson
             },
           },
         },

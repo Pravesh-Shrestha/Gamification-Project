@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Teacher Routes (Content & Quiz Management)
+// academia.io - Teacher Routes (Content & Quiz Management)
 // ============================================================
 
 import { Router } from "express";

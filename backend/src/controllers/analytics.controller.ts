@@ -2,7 +2,7 @@ import { Response } from "express";
 import { AuthRequest } from "../types/index.js";
 import { prisma } from "../lib/prisma.js";
 import { levelFromXP } from "../services/engagement.service.js";
-import { predictStudentPerformance, clusterClassStudents } from "../services/ml.service.js";
+import { predictStudentPerformance, clusterClassStudents, getMLModelMetrics } from "../services/ml.service.js";
 
 export async function getPerformanceSummary(req: AuthRequest, res: Response): Promise<void> {
   try {
@@ -145,3 +145,11 @@ export async function getClassClusters(req: AuthRequest, res: Response): Promise
     res.json({ success: true, data: clusters });
   } catch (e: any) { res.status(400).json({ success: false, error: e.message }); }
 }
+
+export async function getMLMetricsController(req: AuthRequest, res: Response): Promise<void> {
+  try {
+    const metrics = await getMLModelMetrics();
+    res.json({ success: true, data: metrics });
+  } catch (e: any) { res.status(400).json({ success: false, error: e.message }); }
+}
+

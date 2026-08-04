@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — School Service
+// academia.io - School Service
 // ============================================================
 
 import { prisma } from "../lib/prisma.js";

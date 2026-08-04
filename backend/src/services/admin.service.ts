@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Admin Service
+// academia.io - Admin Service
 // ============================================================
 // Full CRUD for schools, users, and classes with role-based
 // access enforcement throughout.

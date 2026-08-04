@@ -2,9 +2,12 @@
 // Handles regression analysis, grouping logic, and difficulty adjustments.
 
 import { prisma } from "../lib/prisma.js";
+import fs from "fs";
+import path from "path";
 
 // Features: [bias, accuracy, consistency, focusScaled, trend]
 let lrWeights = [1.2, -2.8, -2.2, -0.8, -1.2]; // Trained default weights
+const PYTHON_ML_URL = process.env.PYTHON_ML_URL || "http://127.0.0.1:5002";
 
 export interface MLFeatures {
   accuracy: number;
@@ -13,6 +16,8 @@ export interface MLFeatures {
   trend: number;
   totalLessons: number;
   focusMinutes: number;
+  streak?: number;
+  badgesCount?: number;
 }
 
 /**
@@ -23,18 +28,19 @@ export async function extractStudentFeatures(userId: string): Promise<MLFeatures
     where: { id: userId },
     include: {
       lessonsCompleted: { orderBy: { completedAt: "asc" } },
+      badges: true,
     },
   });
 
   if (!user) {
-    return { accuracy: 0, consistency: 0, focusScaled: 0, trend: 0, totalLessons: 0, focusMinutes: 0 };
+    return { accuracy: 0, consistency: 0, focusScaled: 0, trend: 0, totalLessons: 0, focusMinutes: 0, streak: 0, badgesCount: 0 };
   }
 
   // 1. Accuracy Feature (0.0 to 1.0)
   const progress = user.lessonsCompleted;
   const totalCorrect = progress.reduce((sum, p) => sum + p.score, 0);
   const totalQuestions = progress.reduce((sum, p) => sum + p.total, 0);
-  const accuracy = totalQuestions > 0 ? totalCorrect / totalQuestions : 0.5; // default to 0.5 if no questions
+  const accuracy = totalQuestions > 0 ? totalCorrect / totalQuestions : 0.5;
 
   // 2. Consistency Feature (active days in last 30 days / 30)
   const thirtyDaysAgo = new Date();
@@ -52,7 +58,6 @@ export async function extractStudentFeatures(userId: string): Promise<MLFeatures
     recentLogs.map(log => log.createdAt.toISOString().split("T")[0])
   );
 
-  // Fallback to streakDays count if logs are sparse
   let activeDays30 = uniqueDays.size;
   if (activeDays30 === 0) {
     try {
@@ -82,7 +87,7 @@ export async function extractStudentFeatures(userId: string): Promise<MLFeatures
     const sTotal = secondHalf.reduce((sum, p) => sum + p.total, 0);
     const sAcc = sTotal > 0 ? sCorrect / sTotal : 0.5;
 
-    trend = sAcc - fAcc; // positive is improving, negative is declining
+    trend = sAcc - fAcc;
   }
 
   return {
@@ -92,64 +97,173 @@ export async function extractStudentFeatures(userId: string): Promise<MLFeatures
     trend,
     totalLessons: progress.length,
     focusMinutes: user.focusMinutes,
+    streak: user.streak,
+    badgesCount: user.badges.length,
   };
 }
 
-/**
- * Predicts success probability and disengagement risk via Multi-Variable Logistic Regression from pre-extracted features.
- */
+/** Deterministic logical baseline - mirrors the Python ML server's heuristic. */
+function logicalScore(feats: MLFeatures) {
+  const clampedTrend = Math.max(-0.2, Math.min(0.2, feats.trend || 0));
+  const streak = feats.streak ?? 0;
+  return Math.max(30, Math.min(98,
+    feats.accuracy * 70 +
+    feats.consistency * 18 +
+    clampedTrend * 12 +
+    Math.min(1, streak / 14) * 4
+  ));
+}
+
+function logicalDisengagement(feats: MLFeatures) {
+  let score = 0.5;
+  const accuracy = feats.accuracy;
+  const consistency = feats.consistency;
+  const streak = feats.streak ?? 0;
+  const trend = feats.trend || 0;
+  const focusScaled = feats.focusScaled;
+
+  if (accuracy >= 0.85) score -= 0.30;
+  else if (accuracy >= 0.75) score -= 0.15;
+  else if (accuracy >= 0.60) score += 0.05;
+  else score += 0.35;
+
+  if (streak >= 7 || consistency >= 0.60) score -= 0.25;
+  else if (streak <= 1 || consistency < 0.25) score += 0.30;
+
+  if (trend > 0.05) score -= 0.10;
+  else if (trend < -0.05) score += 0.15;
+
+  if (focusScaled < 0.20) score += 0.10;
+  else if (focusScaled > 0.60) score -= 0.05;
+
+  return Math.max(0.05, Math.min(0.95, score));
+}
+
+function mapFlowState(disengagementProb: number, successProbability: number, feats: MLFeatures) {
+  const accuracy = feats.accuracy;
+  const streak = feats.streak ?? 0;
+
+  if (disengagementProb >= 0.65) {
+    if (accuracy < 0.60 || successProbability < 60) {
+      return { flowState: "Anxiety (High Risk)", recommendation: "You're at risk of falling behind. Try a quick 5-minute refresher lesson or start a Pomodoro focus session to rebuild your momentum!" };
+    }
+    return { flowState: "Disengaged (Inactive)", recommendation: "Your active streak has dropped recently. Jump back in with a short daily quest to rebuild your learning habit!" };
+  }
+
+  if (disengagementProb >= 0.35) {
+    if (accuracy < 0.70 || successProbability < 68) {
+      return { flowState: "Anxiety (Over-challenged)", recommendation: "Quizzes are feeling challenging. We recommend reviewing slide explanations before taking your next quiz." };
+    }
+    return { flowState: "Steady Flow", recommendation: "You're making steady progress. Keep up your daily study sessions!" };
+  }
+
+  if (accuracy >= 0.88 && streak >= 7 && feats.totalLessons >= 3 && successProbability >= 82) {
+    return { flowState: "Boredom (Under-challenged)", recommendation: "You're mastering this topic easily! Take on advanced chapters or attempt bonus daily quests for extra XP." };
+  }
+  if (accuracy < 0.60 || successProbability < 60) {
+    return { flowState: "Anxiety (Over-challenged)", recommendation: "Quizzes feel a bit difficult. Try reviewing slide explanations or starting a Pomodoro focus session." };
+  }
+  return { flowState: "Flow State (Optimal)", recommendation: "Great learning balance! Keep progressing steadily through your active curriculum." };
+}
+
 export function predictPerformance(feats: MLFeatures) {
-  // Logistic function input: z = w0 + w1*x1 + w2*x2 + w3*x3 + w4*x4
+  // Logistic-regression style probability from the trained weights
   const z = lrWeights[0] +
             lrWeights[1] * feats.accuracy +
             lrWeights[2] * feats.consistency +
             lrWeights[3] * feats.focusScaled +
             lrWeights[4] * feats.trend;
+  const modelProb = 1 / (1 + Math.exp(-z));
 
-  // Logistic function output: P(disengaged) = 1 / (1 + e^-z)
-  const disengagementProb = 1 / (1 + Math.exp(-z));
+  // Blend model nuance with the logical baseline (50/50) - mirrors ml_server.py
+  let disengagementProb = 0.5 * modelProb + 0.5 * logicalDisengagement(feats);
+  let successProbability = 0.5 * (feats.accuracy * 60 + feats.consistency * 20 + feats.trend * 10 + 10) + 0.5 * logicalScore(feats);
+  if (feats.totalLessons === 0) successProbability = 70;
 
-  // Map probability to disengagement risk level
+  // Strict logical guarantees
+  if (feats.accuracy >= 0.85 && feats.consistency >= 0.60 && (feats.streak ?? 0) >= 5) {
+    disengagementProb = Math.min(disengagementProb, 0.20);
+    successProbability = Math.max(successProbability, 78);
+  }
+  if (feats.accuracy < 0.60 || ((feats.streak ?? 0) <= 1 && feats.consistency < 0.30)) {
+    disengagementProb = Math.max(disengagementProb, 0.55);
+    successProbability = Math.min(successProbability, 62);
+  }
+
+  disengagementProb = Math.max(0.05, Math.min(0.95, disengagementProb));
+  successProbability = Math.max(35, Math.min(99, successProbability));
+
   let disengagementRisk: "Low" | "Medium" | "High" = "Low";
-  if (disengagementProb >= 0.70) disengagementRisk = "High";
+  if (disengagementProb >= 0.65) disengagementRisk = "High";
   else if (disengagementProb >= 0.35) disengagementRisk = "Medium";
 
-  // Predict success probability for next quiz
-  let successProbability = feats.accuracy * 0.7 + feats.consistency * 0.2 + feats.trend * 0.1;
-  // If no lessons completed, default to baseline 70% success likelihood
-  if (feats.totalLessons === 0) successProbability = 0.70;
-  successProbability = Math.max(0.1, Math.min(0.99, successProbability));
-
-  // Flow State & Difficulty Adaptability mapping (Flow Theory)
-  let flowState = "Flow";
-  let recommendation = "Perfect challenge balance! Keep progressing through your current curriculum.";
-
-  if (feats.totalLessons > 0) {
-    if (feats.accuracy >= 0.85) {
-      flowState = "Boredom (Under-challenged)";
-      recommendation = "You're mastering this! We suggest taking advanced chapters or pushing for daily quests.";
-    } else if (feats.accuracy < 0.60) {
-      flowState = "Anxiety (Over-challenged)";
-      recommendation = "Quizzes feel a bit difficult. Try reviewing slide explanations or starting a Pomodoro focus session.";
-    }
-  }
+  const { flowState, recommendation } = mapFlowState(disengagementProb, successProbability, feats);
 
   return {
     disengagementRisk,
     disengagementProb: Math.round(disengagementProb * 100),
-    successProbability: Math.round(successProbability * 100),
+    predictedNextScore: Math.round(successProbability * 10) / 10,
+    successProbability: Math.round(successProbability),
     flowState,
     recommendation,
     features: feats,
+    engine: "JS Fallback Engine (calibrated)",
   };
 }
 
 /**
- * Predicts success probability and disengagement risk via Multi-Variable Logistic Regression.
+ * Predicts success probability and disengagement risk via Python Scikit-Learn Random Forest / Ridge Model.
  */
 export async function predictStudentPerformance(userId: string) {
   const feats = await extractStudentFeatures(userId);
+  
+  try {
+    const res = await fetch(`${PYTHON_ML_URL}/predict`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(feats),
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      return {
+        disengagementRisk: data.disengagementRisk || "Low",
+        disengagementProb: data.disengagementProb ?? 25,
+        predictedNextScore: data.predictedNextScore ?? Math.round(feats.accuracy * 100),
+        successProbability: data.successProbability ?? data.predictedNextScore ?? Math.round(feats.accuracy * 100),
+        flowState: data.flowState || "Flow State",
+        recommendation: data.recommendation || "Keep progressing!",
+        features: feats,
+        engine: data.engine || "Python Scikit-Learn ML Engine",
+      };
+    }
+  } catch (err) {
+    // Graceful fallback to JS engine
+  }
+
   return predictPerformance(feats);
+}
+
+/**
+ * Fetches trained ML model validation metrics directly from Python service or trained model artifact file.
+ */
+export async function getMLModelMetrics() {
+  try {
+    const res = await fetch(`${PYTHON_ML_URL}/metrics`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.classification) return data;
+    }
+  } catch (err) {
+    // Fallback to reading file
+  }
+
+  const metricsPath = path.resolve(process.cwd(), "ml_engine", "models", "model_metrics.json");
+  if (fs.existsSync(metricsPath)) {
+    return JSON.parse(fs.readFileSync(metricsPath, "utf-8"));
+  }
+
+  throw new Error("ML Model Metrics artifact not found. Please run train_model.py first.");
 }
 
 /**
