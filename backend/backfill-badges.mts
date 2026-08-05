@@ -75,7 +75,7 @@ async function backfill() {
           });
           totalAwarded++;
         } catch (e: any) {
-          // Unique constraint — already exists, skip
+          // Unique constraint - already exists, skip
           if (!e.message?.includes("Unique constraint")) {
             console.error(`  ✗ Error awarding ${badgeId} to ${student.name}:`, e.message);
           }

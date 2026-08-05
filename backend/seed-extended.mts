@@ -1,6 +1,6 @@
 /**
  * ============================================================
- * academia.io — Extended Multi-School Seed (Additive)
+ * academia.io - Extended Multi-School Seed (Additive)
  * Adds 3 new schools, admins, teachers, and ~300 students
  * with realistic natural engagement distributions.
  * Does NOT wipe existing data.
@@ -151,7 +151,7 @@ async function seedStudent(opts: {
   const avatar = pick(AVATARS);
   const today = todayKey();
 
-  // Build todayXp map — spread XP over last 60 days realistically
+  // Build todayXp map - spread XP over last 60 days realistically
   const todayXpMap: Record<string, number> = {};
   const streakDaysArr: string[] = [];
 
@@ -194,7 +194,7 @@ async function seedStudent(opts: {
     },
   });
 
-  // Lesson progress — spread over 60 days
+  // Lesson progress - spread over 60 days
   const lessonInterval = lessonSample.length > 0 ? Math.floor(60 / lessonSample.length) : 1;
   for (let i = 0; i < lessonSample.length; i++) {
     const lessonId = lessonSample[i];
@@ -212,7 +212,7 @@ async function seedStudent(opts: {
       await prisma.lessonProgress.create({
         data: { userId: id, lessonId, score, total, perfect: isPerfect, xpEarned: lessonXp, completedAt },
       });
-    } catch { /* unique constraint — skip duplicate */ }
+    } catch { /* unique constraint - skip duplicate */ }
 
     await prisma.interactionLog.create({
       data: {
@@ -303,7 +303,7 @@ async function seedStudent(opts: {
 
 // ── Main ──────────────────────────────────────────────────────
 async function main() {
-  console.log("🌱 Extended multi-school seed starting (additive — no data wipe)...\n");
+  console.log("🌱 Extended multi-school seed starting (additive - no data wipe)...\n");
 
   const password = await bcrypt.hash("password123", 10);
   const allLessons = await prisma.lesson.findMany({ select: { id: true } });
@@ -447,13 +447,13 @@ async function main() {
 
   // ── Assignments for new schools ───────────────────────────────
   const assignmentDefs = [
-    { schoolId: "sch_sunrise", teacherId: "u_t_sunrise_1", lessonId: "m-alg-1",    daysUntilDue: 5,  note: "Algebra introduction — review before test." },
+    { schoolId: "sch_sunrise", teacherId: "u_t_sunrise_1", lessonId: "m-alg-1",    daysUntilDue: 5,  note: "Algebra introduction - review before test." },
     { schoolId: "sch_sunrise", teacherId: "u_t_sunrise_2", lessonId: "e-gram-1",   daysUntilDue: 3,  note: "Grammar check for class 6." },
     { schoolId: "sch_wisdom",  teacherId: "u_t_wisdom_1",  lessonId: "s-plants-1", daysUntilDue: 7,  note: "Plant biology chapter review." },
-    { schoolId: "sch_wisdom",  teacherId: "u_t_wisdom_2",  lessonId: "cs-code-1",  daysUntilDue: 10, note: "Intro coding — pair with scratch activity." },
+    { schoolId: "sch_wisdom",  teacherId: "u_t_wisdom_2",  lessonId: "cs-code-1",  daysUntilDue: 10, note: "Intro coding - pair with scratch activity." },
     { schoolId: "sch_valley",  teacherId: "u_t_valley_1",  lessonId: "ss-geo-2",   daysUntilDue: 4,  note: "Nepal geography unit." },
     { schoolId: "sch_valley",  teacherId: "u_t_valley_2",  lessonId: "m-frac-2",   daysUntilDue: 2,  note: "Fractions worksheet follow-up." },
-    { schoolId: "sch_everest", teacherId: "u_t_everest_1", lessonId: "s-forces-1", daysUntilDue: 6,  note: "Forces unit — Newton's laws intro." },
+    { schoolId: "sch_everest", teacherId: "u_t_everest_1", lessonId: "s-forces-1", daysUntilDue: 6,  note: "Forces unit - Newton's laws intro." },
     { schoolId: "sch_indra",   teacherId: "u_t_indra_1",   lessonId: "health-nut-1",daysUntilDue: 8, note: "Health awareness week activity." },
   ];
 
