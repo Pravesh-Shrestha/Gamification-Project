@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Content & Subject Management API
+// academia.io - Content & Subject Management API
 // ============================================================
 
 import { getToken } from "./api";

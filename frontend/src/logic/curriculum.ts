@@ -19,7 +19,7 @@ const CURRICULUM = [
             slides: [
               { kind: "intro", body: "A fraction shows a part of a whole. The top number (numerator) counts the parts you have. The bottom number (denominator) shows how many parts the whole is split into." },
               { kind: "example", body: "Imagine a pizza cut into 4 equal slices. If you eat 1 slice, you've eaten 1/4 of the pizza.", visual: "pizza" },
-              { kind: "tip", body: "When the numerator and denominator are equal (like 4/4), the fraction equals 1 — a whole." },
+              { kind: "tip", body: "When the numerator and denominator are equal (like 4/4), the fraction equals 1 - a whole." },
             ],
             quiz: [
               { kind: "mcq", q: "A cake is cut into 8 equal slices. You eat 3. What fraction did you eat?", choices: ["3/5", "3/8", "8/3", "5/8"], answer: 1 },
@@ -34,7 +34,7 @@ const CURRICULUM = [
             slides: [
               { kind: "intro", body: "To add fractions with the same denominator, add the numerators and keep the denominator the same." },
               { kind: "example", body: "1/5 + 2/5 = 3/5. The bottom number stays as 5.", visual: "blocks" },
-              { kind: "tip", body: "If denominators are different, you'll need to find a common denominator first — coming up next!" },
+              { kind: "tip", body: "If denominators are different, you'll need to find a common denominator first - coming up next!" },
             ],
             quiz: [
               { kind: "mcq", q: "What is 2/7 + 3/7?", choices: ["5/14", "6/7", "5/7", "1/7"], answer: 2 },
@@ -105,7 +105,7 @@ const CURRICULUM = [
             mins: 4,
             slides: [
               { kind: "intro", body: "An angle is formed where two lines meet. We measure angles in degrees (°)." },
-              { kind: "example", body: "A right angle is exactly 90° — like the corner of a book." },
+              { kind: "example", body: "A right angle is exactly 90° - like the corner of a book." },
               { kind: "tip", body: "Less than 90° is acute. More than 90° but less than 180° is obtuse." },
             ],
             quiz: [
@@ -150,9 +150,9 @@ const CURRICULUM = [
             title: "Animals & habitats",
             mins: 4,
             slides: [
-              { kind: "intro", body: "A habitat is the natural home of an animal — like a forest, river, or desert." },
+              { kind: "intro", body: "A habitat is the natural home of an animal - like a forest, river, or desert." },
               { kind: "example", body: "Polar bears live in the Arctic. Tigers live in forests. Fish live in water." },
-              { kind: "tip", body: "Animals are adapted to their habitats — fur for cold, fins for water." },
+              { kind: "tip", body: "Animals are adapted to their habitats - fur for cold, fins for water." },
             ],
             quiz: [
               { kind: "mcq", q: "Which animal is adapted to live in cold places?", choices: ["Camel", "Polar bear", "Snake", "Parrot"], answer: 1 },
@@ -173,7 +173,7 @@ const CURRICULUM = [
             slides: [
               { kind: "intro", body: "A force is a push or a pull. Forces make things move, stop, or change direction." },
               { kind: "example", body: "When you drop a ball, gravity pulls it down to the ground." },
-              { kind: "tip", body: "Friction is a force that slows things down — like brakes on a bike." },
+              { kind: "tip", body: "Friction is a force that slows things down - like brakes on a bike." },
             ],
             quiz: [
               { kind: "mcq", q: "What force pulls a dropped apple downward?", choices: ["Friction", "Magnetism", "Gravity", "Wind"], answer: 2 },
@@ -227,7 +227,7 @@ const CURRICULUM = [
             slides: [
               { kind: "intro", body: "A noun names a person, place, animal or thing. A verb shows action." },
               { kind: "example", body: "In 'The dog runs', 'dog' is the noun and 'runs' is the verb." },
-              { kind: "tip", body: "Verbs can also describe states — like 'is', 'feels', or 'thinks'." },
+              { kind: "tip", body: "Verbs can also describe states - like 'is', 'feels', or 'thinks'." },
             ],
             quiz: [
               { kind: "mcq", q: "Which word is a noun?", choices: ["Quickly", "Mountain", "Jumped", "Bright"], answer: 1 },
@@ -240,7 +240,7 @@ const CURRICULUM = [
             title: "Tenses",
             mins: 5,
             slides: [
-              { kind: "intro", body: "Tense tells us when an action happens — past, present or future." },
+              { kind: "intro", body: "Tense tells us when an action happens - past, present or future." },
               { kind: "example", body: "Past: 'I walked.' Present: 'I walk.' Future: 'I will walk.'" },
               { kind: "tip", body: "Many past-tense verbs end in '-ed', but some change completely: go → went." },
             ],

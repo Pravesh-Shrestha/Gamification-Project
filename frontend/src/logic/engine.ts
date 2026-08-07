@@ -54,7 +54,12 @@ function bumpStreak(profile) {
     profile.streak = 1;
   }
   profile.lastActiveDay = today;
-  profile.streakDays = profile.streakDays || [];
+  // Normalize streakDays - the backend (and older local profiles) may store it
+  // as a JSON string instead of an array. Guard so we never crash mid-save.
+  if (typeof profile.streakDays === "string") {
+    try { profile.streakDays = JSON.parse(profile.streakDays || "[]"); } catch { profile.streakDays = []; }
+  }
+  profile.streakDays = Array.isArray(profile.streakDays) ? profile.streakDays : [];
   if (!profile.streakDays.includes(today)) profile.streakDays.push(today);
   return profile.streak;
 }
@@ -104,6 +109,9 @@ function processLessonComplete(profile, lessonId, score, total, opts: any = {}) 
   const xpGain = Math.round((xpFromQs + xpLesson + xpBonus) * mult);
 
   profile.xp = (profile.xp || 0) + xpGain;
+  if (typeof profile.todayXP === "string") {
+    try { profile.todayXP = JSON.parse(profile.todayXP || "{}"); } catch { profile.todayXP = {}; }
+  }
   profile.todayXP = (profile.todayXP || {});
   const tk = todayKey();
   profile.todayXP[tk] = (profile.todayXP[tk] || 0) + xpGain;
@@ -113,12 +121,12 @@ function processLessonComplete(profile, lessonId, score, total, opts: any = {}) 
     profile.lessonsCompleted.push(lessonId);
     log.push(`Lesson "${lessonId}" marked complete`);
   } else {
-    log.push(`Lesson "${lessonId}" already done — re-played for review`);
+    log.push(`Lesson "${lessonId}" already done - re-played for review`);
   }
 
   if (perfect) {
     profile.perfectQuizzes = (profile.perfectQuizzes || 0) + 1;
-    log.push(`Perfect score — bonus +${XP_PERFECT_BONUS} XP`);
+    log.push(`Perfect score - bonus +${XP_PERFECT_BONUS} XP`);
   }
 
   log.push(`+${xpGain} XP awarded (${xpFromQs} from answers + ${xpLesson} lesson${perfect ? " + " + XP_PERFECT_BONUS + " bonus" : ""}${mult !== 1 ? ` × ${mult}` : ""})`);
@@ -140,8 +148,11 @@ function processFocusComplete(profile, minutes, opts: any = {}) {
   const mult = opts.xpMultiplier || 1;
   const xp = Math.round(minutes * XP_FOCUS_PER_MIN * mult);
   profile.xp = (profile.xp || 0) + xp;
-  const tk = todayKey();
+  if (typeof profile.todayXP === "string") {
+    try { profile.todayXP = JSON.parse(profile.todayXP || "{}"); } catch { profile.todayXP = {}; }
+  }
   profile.todayXP = profile.todayXP || {};
+  const tk = todayKey();
   profile.todayXP[tk] = (profile.todayXP[tk] || 0) + xp;
   profile.focusMinutes = (profile.focusMinutes || 0) + minutes;
   profile.treesGrown = (profile.treesGrown || 0) + 1;
@@ -168,7 +179,7 @@ function balanceCheck(profile, mode = "balanced") {
       warn: true,
       message:
         mode === "strict"
-          ? "You've done a lot today. Take a real break — close the app and stretch."
+          ? "You've done a lot today. Take a real break - close the app and stretch."
           : "Great work today! Consider stopping here to keep learning healthy.",
     };
   }

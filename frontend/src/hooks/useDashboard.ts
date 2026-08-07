@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — useDashboard Hook
+// academia.io - useDashboard Hook
 // ============================================================
 // Fetches and caches the full dashboard data (gamification
 // stats, badges, recent activity, notifications).

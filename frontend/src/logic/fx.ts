@@ -140,10 +140,28 @@ const Sound = {
   },
 };
 
+/**
+ * Color-theory helper: returns a text color (dark or white) that reads clearly
+ * on a given background hex. Uses relative luminance (WCAG) to pick whichever
+ * gives the higher contrast - so colored buttons never show unreadable text.
+ */
+function readableTextOn(bg: string | undefined, fallback = "#ffffff"): string {
+  const hex = String(bg || "").trim().replace("#", "");
+  if (hex.length < 6) return fallback;
+  const r = parseInt(hex.slice(0, 2), 16);
+  const g = parseInt(hex.slice(2, 4), 16);
+  const b = parseInt(hex.slice(4, 6), 16);
+  // Perceived luminance (weighted color theory formula)
+  const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  // Mid-grey threshold: dark text on light fills, white text on dark fills
+  return lum > 0.55 ? "#0B0D17" : "#ffffff";
+}
+
 const FX = { fire, Sound };
 
-export { FX, fire, Sound };
+export { FX, fire, Sound, readableTextOn };
 
 if (typeof window !== "undefined") {
   window.FX = FX;
+  window.readableTextOn = readableTextOn;
 }

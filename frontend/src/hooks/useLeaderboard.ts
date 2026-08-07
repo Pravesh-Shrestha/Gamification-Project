@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — useLeaderboard Hook
+// academia.io - useLeaderboard Hook
 // ============================================================
 
 import { useState, useEffect, useCallback } from "react";

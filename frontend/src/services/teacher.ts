@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Teacher API Client
+// academia.io - Teacher API Client
 // ============================================================
 
 import { getToken } from "./api";

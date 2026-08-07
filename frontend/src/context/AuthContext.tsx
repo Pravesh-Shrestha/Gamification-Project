@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Auth Context
+// academia.io - Auth Context
 // ============================================================
 // Provides authentication state across the entire app.
 // Handles login, logout, token persistence, and auto-restore.
@@ -15,15 +15,17 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // On mount — try to restore session from stored token
+  // On mount - try to restore session from stored token
   useEffect(() => {
     const token = getToken();
     if (token) {
-      authApi
-        .me()
-        .then((u) => setUser(u))
+      // Short splash so the loading screen is visible, but not long enough
+      // to make the demo look like it has hung.
+      const minWait = new Promise(resolve => setTimeout(resolve, 700));
+      Promise.all([authApi.me(), minWait])
+        .then(([u]) => setUser(u))
         .catch(() => {
-          // Token expired or invalid — clear it
+          // Token expired or invalid - clear it
           setToken(null);
         })
         .finally(() => setLoading(false));
@@ -45,12 +47,17 @@ export function AuthProvider({ children }) {
   const login = useCallback(async (email, password) => {
     setError(null);
     setLoading(true);
+    const minWait = new Promise(resolve => setTimeout(resolve, 700));
     try {
-      const result = await authApi.login(email, password);
+      const [result] = await Promise.all([
+        authApi.login(email, password),
+        minWait
+      ]);
       setToken(result.token);
       setUser(result.user);
       return result;
-    } catch (err) {
+    } catch (err: any) {
+      await minWait;
       setError(err.message);
       throw err;
     } finally {

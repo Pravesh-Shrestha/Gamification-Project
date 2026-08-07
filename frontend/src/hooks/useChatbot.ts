@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — useChatbot Hook
+// academia.io - useChatbot Hook
 // ============================================================
 
 import { useState, useCallback } from "react";

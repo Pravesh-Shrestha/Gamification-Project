@@ -63,7 +63,11 @@ function todaysQuests(userId) {
 
 function questProgress(profile, quest) {
   const tk = todayKey();
-  const todayState = (profile.questsState && profile.questsState[tk]) || {};
+  let state = profile.questsState;
+  if (typeof state === "string") {
+    try { state = JSON.parse(state || "{}"); } catch { state = {}; }
+  }
+  const todayState = (state && state[tk]) || {};
   return todayState[quest.id] || 0;
 }
 
@@ -73,6 +77,9 @@ function questDone(profile, quest) {
 
 function bumpQuest(profile, quest, by) {
   const tk = todayKey();
+  if (typeof profile.questsState === "string") {
+    try { profile.questsState = JSON.parse(profile.questsState || "{}"); } catch { profile.questsState = {}; }
+  }
   profile.questsState = profile.questsState || {};
   profile.questsState[tk] = profile.questsState[tk] || {};
   const before = profile.questsState[tk][quest.id] || 0;

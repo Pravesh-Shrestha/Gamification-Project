@@ -1,6 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import Landing from "./features/auth/Landing";
+import CodedexLoadingScreen from "./components/shared/LoadingScreen";
+
+const Login = (props: any) => React.createElement((window as any).Login || "div", props);
+const StudentApp = (props: any) => React.createElement((window as any).StudentApp || "div", props);
+const TeacherApp = (props: any) => React.createElement((window as any).TeacherApp || "div", props);
+const AdminApp = (props: any) => React.createElement((window as any).AdminApp || "div", props);
+const SuperAdminApp = (props: any) => React.createElement((window as any).SuperAdminApp || "div", props);
 
 function AppShell() {
   const { user, login, logout, loading } = useAuth();
@@ -48,46 +56,7 @@ function AppShell() {
   const [showLogin, setShowLogin] = React.useState(false);
 
   if (loading) {
-    return (
-      <div style={{
-        minHeight: "100vh",
-        display: "grid",
-        placeItems: "center",
-        background: "#FEFCF8",
-      }}>
-        <div style={{ textAlign: "center", animation: "fadeInUp 0.4s ease-out both" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 20 }}>
-            <div style={{
-              width: 42,
-              height: 42,
-              borderRadius: 10,
-              background: "var(--gradient-brand)",
-              display: "grid",
-              placeItems: "center",
-              color: "white",
-              fontWeight: 900,
-              fontSize: 24,
-              fontFamily: "var(--font-display)",
-              boxShadow: "0 3px 12px rgba(108, 60, 225, 0.4)"
-            }}>a</div>
-            <span style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 24, letterSpacing: "-.01em" }}>academia.io</span>
-          </div>
-          <div style={{
-            width: 36, height: 36, margin: "0 auto",
-            border: "3px solid #ECE6DC",
-            borderTopColor: "#6C3CE1",
-            borderRadius: "50%",
-            animation: "spin 0.8s linear infinite",
-          }} />
-          <div style={{
-            marginTop: 14, fontSize: 13, fontWeight: 700,
-            color: "#908579",
-          }}>
-            Loading your workspace...
-          </div>
-        </div>
-      </div>
-    );
+    return <CodedexLoadingScreen message="Loading your workspace... ✦" />;
   }
 
   if (!user && !showLogin) {
@@ -103,6 +72,16 @@ function AppShell() {
     );
   }
 
+  // Backend stores streakDays / todayXp / questsState / cosmetics as JSON
+  // strings. Parse them back into arrays/objects so the engine (which calls
+  // .push/.includes on streakDays and indexes questsState[today]) and the
+  // gamification UI don't crash or show stale progress.
+  const parseJson = (val, fallback) => {
+    if (val == null || val === "") return fallback;
+    if (typeof val !== "string") return val;
+    try { return JSON.parse(val); } catch { return fallback; }
+  };
+
   const appUser = {
     id: user.id,
     name: user.name,
@@ -113,15 +92,16 @@ function AppShell() {
     grade: user.grade,
     xp: user.xp || 0,
     streak: user.streak || 0,
-    streakDays: user.streakDays || [],
+    streakDays: parseJson(user.streakDays, []),
+    lastActiveDay: user.lastActiveDate || user.lastActiveDay || null,
     lessonsCompleted: [],
     perfectQuizzes: 0,
     focusMinutes: 0,
     treesGrown: 0,
     badges: [],
-    cosmetics: user.cosmetics || [],
-    questsState: user.questsState || null,
-    todayXP: {},
+    cosmetics: parseJson(user.cosmetics, []),
+    questsState: parseJson(user.questsState, null),
+    todayXP: parseJson(user.todayXp, {}),
     todayXp: user.todayXp || 0,
     dailyGoal: 50,
   };

@@ -29,11 +29,22 @@ function seed() {
   const schools = [
     { id: "sch_galaxy", name: "Galaxy Academy", city: "Lalitpur", color: "#3B82F6", motto: "Reach for the stars" },
     { id: "sch_himalaya", name: "Himalaya Public School", city: "Kathmandu", color: "#10B981", motto: "Rise & learn" },
+    // Mirror of the schools added to the backend by seed-extended.mts
+    { id: "sch_sunrise", name: "Sunrise Academy", city: "Pokhara", color: "#F59E0B", motto: "Rise with the sun" },
+    { id: "sch_wisdom", name: "Wisdom International", city: "Biratnagar", color: "#8B5CF6", motto: "Knowledge is power" },
+    { id: "sch_valley", name: "Valley View School", city: "Lalitpur", color: "#EF4444", motto: "Learn, grow, lead" },
+    { id: "sch_everest", name: "Everest Model School", city: "Kathmandu", color: "#06B6D4", motto: "Peak of excellence" },
+    { id: "sch_indra", name: "Indra Memorial School", city: "Butwal", color: "#10B981", motto: "Education for all" },
   ];
 
   const seedAdmins = [
     { id: "u_admin_galaxy", role: "admin", name: "Anita Pradhan", email: "anita@galaxy.edu", schoolId: "sch_galaxy", avatar: "owl" },
     { id: "u_admin_himalaya", role: "admin", name: "Suman KC", email: "suman@himalaya.edu", schoolId: "sch_himalaya", avatar: "fox" },
+    { id: "u_admin_sunrise", role: "admin", name: "Pratap Gurung", email: "admin@sunrise.edu", schoolId: "sch_sunrise", avatar: "owl" },
+    { id: "u_admin_wisdom", role: "admin", name: "Kamala Thapa", email: "admin@wisdom.edu", schoolId: "sch_wisdom", avatar: "fox" },
+    { id: "u_admin_valley", role: "admin", name: "Rajendra Basnet", email: "admin@valley.edu", schoolId: "sch_valley", avatar: "bear" },
+    { id: "u_admin_everest", role: "admin", name: "Meena Magar", email: "admin@everest.edu", schoolId: "sch_everest", avatar: "penguin" },
+    { id: "u_admin_indra", role: "admin", name: "Suresh Dahal", email: "admin@indra.edu", schoolId: "sch_indra", avatar: "hat" },
   ];
 
   const seedTeachers = [
@@ -44,6 +55,19 @@ function seed() {
     { id: "u_t_himalaya_1", role: "teacher", name: "Bibek Rai", email: "bibek@himalaya.edu", schoolId: "sch_himalaya", avatar: "frog", subjects: ["eng", "sci"] },
     { id: "u_t_himalaya_2", role: "teacher", name: "Anju Sharma", email: "anju@himalaya.edu", schoolId: "sch_himalaya", avatar: "bunny", subjects: ["math"] },
     { id: "u_t_himalaya_3", role: "teacher", name: "Kiran Adhikari", email: "kiran@himalaya.edu", schoolId: "sch_himalaya", avatar: "monkey", subjects: ["sci"] },
+    // Teachers for the new schools
+    { id: "u_t_sunrise_1", role: "teacher", name: "Bibek Poudel", email: "bibek.sir@sunrise.edu", schoolId: "sch_sunrise", avatar: "panda", subjects: ["math"] },
+    { id: "u_t_sunrise_2", role: "teacher", name: "Sarita Mishra", email: "sarita.m@sunrise.edu", schoolId: "sch_sunrise", avatar: "cat", subjects: ["sci"] },
+    { id: "u_t_sunrise_3", role: "teacher", name: "Ram Kumar KC", email: "ram.k@sunrise.edu", schoolId: "sch_sunrise", avatar: "dog", subjects: ["eng"] },
+    { id: "u_t_wisdom_1", role: "teacher", name: "Anjali Tamang", email: "anjali.t@wisdom.edu", schoolId: "sch_wisdom", avatar: "bunny", subjects: ["math"] },
+    { id: "u_t_wisdom_2", role: "teacher", name: "Santosh Mahat", email: "santosh.m@wisdom.edu", schoolId: "sch_wisdom", avatar: "monkey", subjects: ["sci"] },
+    { id: "u_t_valley_1", role: "teacher", name: "Krishna Dahal", email: "krishna.d@valley.edu", schoolId: "sch_valley", avatar: "frog", subjects: ["math"] },
+    { id: "u_t_valley_2", role: "teacher", name: "Sunita Oli", email: "sunita.o@valley.edu", schoolId: "sch_valley", avatar: "unicorn", subjects: ["sci"] },
+    { id: "u_t_valley_3", role: "teacher", name: "Himal Rana", email: "himal.r@valley.edu", schoolId: "sch_valley", avatar: "owl", subjects: ["eng"] },
+    { id: "u_t_everest_1", role: "teacher", name: "Deepak Ghimire", email: "deepak.g@everest.edu", schoolId: "sch_everest", avatar: "bear", subjects: ["math"] },
+    { id: "u_t_everest_2", role: "teacher", name: "Namrata Parajuli", email: "namrata.p@everest.edu", schoolId: "sch_everest", avatar: "fox", subjects: ["sci"] },
+    { id: "u_t_indra_1", role: "teacher", name: "Gopal Sharma", email: "gopal.s@indra.edu", schoolId: "sch_indra", avatar: "hat", subjects: ["math"] },
+    { id: "u_t_indra_2", role: "teacher", name: "Roshani Chhetri", email: "roshani.c@indra.edu", schoolId: "sch_indra", avatar: "penguin", subjects: ["sci"] },
   ];
 
   const seedStudents = [
@@ -149,6 +173,78 @@ function seed() {
     { id: "cls_h8a", schoolId: "sch_himalaya", name: "Grade 8A", grade: "Grade 8", teacherId: "u_t_himalaya_3", studentIds: ["u_s_h15", "u_s_h16"] },
   );
 
+  // ── Generate classes + students for the extra schools (leaderboards) ──
+  const EXTRA_FIRST = ["Aarav","Sita","Rahul","Priya","Bishnu","Anjana","Kiran","Roshan","Mina","Nisha","Dipesh","Sneha","Mohan","Sabina","Krishna","Arjun","Puja","Ramesh","Saraswati","Ganesh","Laxmi","Hari","Savitri","Ram","Janaki","Bhim","Kunti","Yubaraj","Sharmila","Pradip","Gita","Sanjay","Rupa","Sunil","Manju","Bibek","Alisha","Sandip","Kriti","Rajesh"];
+  const EXTRA_LAST = ["Shrestha","Karki","Adhikari","Tamang","Lama","Rai","Thapa","Magar","Khadka","Gurung","Maharjan","Joshi","Bhattarai","Gautam","Pandey","Dahal","Bhandari","Basnet","Acharya","Giri"];
+  let extraIdx = 0;
+  for (const school of schools) {
+    const prefix = school.id.replace("sch_", "");
+    if (prefix === "galaxy" || prefix === "himalaya") continue; // already seeded above
+    const schoolTeachers = seedTeachers.filter((t: any) => t.schoolId === school.id);
+    for (let g = 1; g <= 8; g++) {
+      const gradeLabel = `Grade ${g}`;
+      const teacher = schoolTeachers[(g - 1) % Math.max(1, schoolTeachers.length)];
+      const studentIds: string[] = [];
+      for (let k = 1; k <= 6; k++) {
+        extraIdx++;
+        const sid = `u_s_${prefix}_${extraIdx}`;
+        const first = EXTRA_FIRST[(extraIdx * 13) % EXTRA_FIRST.length];
+        const last = EXTRA_LAST[(extraIdx * 7) % EXTRA_LAST.length];
+        const name = `${first} ${last}`;
+        const xp = 120 + ((extraIdx * 137) % 900);
+        const streak = (extraIdx * 7) % 16;
+        studentIds.push(sid);
+        db.users.push({
+          id: sid, role: "student", name, avatar: AVATARS[(extraIdx * 5) % AVATARS.length],
+          email: `${first.toLowerCase()}.${sid}@${prefix}.edu`, schoolId: school.id, grade: gradeLabel,
+          createdBy: `u_admin_${prefix}`, createdAt: now(),
+          xp, streak, streakDays: [], lastActiveDay: Engine ? Engine.todayKey() : null,
+          lessonsCompleted: [], perfectQuizzes: (extraIdx * 3) % 8, focusMinutes: Math.floor(xp / 12),
+          treesGrown: Math.floor(xp / 80), badges: [], todayXP: spreadHistory(xp), dailyGoal: 50,
+          cosmetics: [], combos: 0,
+        });
+      }
+      db.classes.push({
+        id: `cls_${prefix}${g}a`, schoolId: school.id, name: `Grade ${g}A`, grade: gradeLabel,
+        teacherId: teacher ? teacher.id : null, studentIds,
+      });
+    }
+  }
+
+  // ── Boost the original Galaxy & Himalaya classes with more students ──
+  // (each class had only 2 students; add 4 more so leaderboards look alive)
+  let boostIdx = 0;
+  for (const school of schools) {
+    const prefix = school.id.replace("sch_", "");
+    if (prefix !== "galaxy" && prefix !== "himalaya") continue;
+    const schoolTeachers = seedTeachers.filter((t: any) => t.schoolId === school.id);
+    for (let g = 1; g <= 8; g++) {
+      const gradeLabel = `Grade ${g}`;
+      const cls = db.classes.find((c: any) => c.schoolId === school.id && c.grade === gradeLabel);
+      if (!cls) continue;
+      const teacher = schoolTeachers[(g - 1) % Math.max(1, schoolTeachers.length)];
+      for (let k = 1; k <= 4; k++) {
+        boostIdx++;
+        const sid = `u_s_${prefix}${g}_b${k}`;
+        const first = EXTRA_FIRST[(boostIdx * 13 + g * 7) % EXTRA_FIRST.length];
+        const last = EXTRA_LAST[(boostIdx * 7 + g * 3) % EXTRA_LAST.length];
+        const name = `${first} ${last}`;
+        const xp = 90 + ((boostIdx * 137 + g * 50) % 850);
+        const streak = (boostIdx * 11 + g) % 18;
+        cls.studentIds.push(sid);
+        db.users.push({
+          id: sid, role: "student", name, avatar: AVATARS[(boostIdx * 7) % AVATARS.length],
+          email: `${first.toLowerCase()}.${sid}@${prefix}.edu`, schoolId: school.id, grade: gradeLabel,
+          createdBy: `u_admin_${prefix}`, createdAt: now(),
+          xp, streak, streakDays: [], lastActiveDay: Engine ? Engine.todayKey() : null,
+          lessonsCompleted: [], perfectQuizzes: (boostIdx * 3) % 8, focusMinutes: Math.floor(xp / 12),
+          treesGrown: Math.floor(xp / 80), badges: [], todayXP: spreadHistory(xp), dailyGoal: 50,
+          cosmetics: [], combos: 0,
+        });
+      }
+    }
+  }
+
   const today = new Date();
   const due = new Date(); due.setDate(today.getDate() + 3);
   const dueLater = new Date(); dueLater.setDate(today.getDate() + 7);
@@ -167,10 +263,10 @@ function seed() {
   );
 
   db.announcements.push(
-    { id: uid("ann"), classId: "cls_g5a", authorId: "u_t_galaxy_1", text: "Fractions test on Friday — please finish all 3 fractions lessons before then.", t: now() - 1000 * 60 * 60 * 20 },
+    { id: uid("ann"), classId: "cls_g5a", authorId: "u_t_galaxy_1", text: "Fractions test on Friday - please finish all 3 fractions lessons before then.", t: now() - 1000 * 60 * 60 * 20 },
     { id: uid("ann"), classId: "cls_g7a", authorId: "u_t_galaxy_1", text: "Welcome to Algebra Basics! Try the first lesson tonight, even just 5 minutes.", t: now() - 1000 * 60 * 60 * 30 },
     { id: uid("ann"), classId: "cls_h5a", authorId: "u_t_himalaya_1", text: "Reading buddy pairs are posted. Be kind, help each other!", t: now() - 1000 * 60 * 60 * 8 },
-    { id: uid("ann"), classId: "cls_h6a", authorId: "u_t_himalaya_1", text: "Science quiz next week — review plant and animal cells!", t: now() - 1000 * 60 * 60 * 10 },
+    { id: uid("ann"), classId: "cls_h6a", authorId: "u_t_himalaya_1", text: "Science quiz next week - review plant and animal cells!", t: now() - 1000 * 60 * 60 * 10 },
   );
 
   function notif(userId, kind, title, body, time) {
@@ -178,7 +274,7 @@ function seed() {
     db.notifications[userId].push({ id: uid("n"), kind, title, body, t: time || now(), read: false });
   }
   notif("u_s_g1", "assignment", "New assignment", "Mr. Joshi posted “Comparing fractions”. Due in 3 days.", now() - 1000 * 60 * 60 * 2);
-  notif("u_s_g1", "announcement", "Class message", "Fractions test on Friday — please finish all 3 fractions lessons before then.", now() - 1000 * 60 * 60 * 20);
+  notif("u_s_g1", "announcement", "Class message", "Fractions test on Friday - please finish all 3 fractions lessons before then.", now() - 1000 * 60 * 60 * 20);
   notif("u_s_g2", "badge", "Badge unlocked", "You earned “Perfectionist”! 3 perfect quizzes in a row.", now() - 1000 * 60 * 30);
   notif("u_s_g13", "level", "Level up!", "You reached Level 8. Keep going!", now() - 1000 * 60 * 90);
   notif("u_s_h9", "streak", "11-day streak", "You're on fire. Don't break the chain!", now() - 1000 * 60 * 60 * 4);
@@ -186,7 +282,7 @@ function seed() {
   return db;
 }
 
-const DB_VERSION = 3; // bump to force reseed when schema changes
+const DB_VERSION = 5; // bump to force reseed when schema changes
 
 function load() {
   try {
@@ -257,11 +353,16 @@ function updateUser(db, userId, patch) {
 function createUser(db, data) {
   const user = { id: uid("u"), createdAt: now(), avatar: AVATARS[Math.floor(Math.random() * AVATARS.length)], ...data };
   if (user.role === "student") {
-    Object.assign(user, {
+    // Fill defaults ONLY for fields the caller didn't provide - never wipe real
+    // gamification values (xp/streak/questsState/…) passed in `data`.
+    const defaults = {
       xp: 0, streak: 0, streakDays: [], lessonsCompleted: [], perfectQuizzes: 0,
       focusMinutes: 0, treesGrown: 0, badges: [], todayXP: {}, dailyGoal: 50,
       cosmetics: [], combos: 0,
-    });
+    };
+    for (const k of Object.keys(defaults)) {
+      if (user[k] == null) user[k] = defaults[k];
+    }
   }
   db.users.push(user);
   save(db);
