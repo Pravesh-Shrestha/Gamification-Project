@@ -35,7 +35,7 @@ function Login({ onLogin, onBack }) {
       {/* Looping Background Video */}
       <div className="login-video-bg-wrap">
         <video
-          src="https://drive.google.com/uc?export=download&id=1Og9sk1Ox-DlT49RVYbIJAdnrx6Glfcjj"
+          src="/assets/banner.mp4"
           autoPlay
           loop
           muted
