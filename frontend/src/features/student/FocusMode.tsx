@@ -1,6 +1,6 @@
 import React from "react";
 
-// academia.io — Focus mode (Forest-style)
+// academia.io - Focus mode (Forest-style)
 // Plant a virtual tree that grows during a focus timer. Leave the tab → tree dies.
 
 function FocusMode({ profile, onComplete, onExit }) {
@@ -12,7 +12,7 @@ function FocusMode({ profile, onComplete, onExit }) {
   const [completed, setCompleted] = React.useState(false);
   const tickRef = React.useRef(null);
 
-  // tab visibility detection — leave the tab while running and the tree dies
+  // tab visibility detection - leave the tab while running and the tree dies
   React.useEffect(() => {
     function onVis() {
       if (document.hidden && running && !completed) {
@@ -78,7 +78,7 @@ function FocusMode({ profile, onComplete, onExit }) {
           {completed
             ? "You stayed focused the whole time. Your tree is added to your forest."
             : dead
-            ? "You left the tab. Try again — keep this tab open until the timer ends."
+            ? "You left the tab. Try again - keep this tab open until the timer ends."
             : running
             ? "Keep this tab open. If you leave, your tree dies."
             : "Pick a length, plant your tree, and stay on this tab until the timer ends."}

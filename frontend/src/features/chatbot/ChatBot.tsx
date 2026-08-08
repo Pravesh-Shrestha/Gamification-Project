@@ -71,18 +71,18 @@ function TypingDots() {
 // Primary user interface component.
 
 function ChatBot({ onClose }) {
-  const [messages, setMessages] = React.useState([
+  const [messages, setMessages] = React.useState<{ role: string; content: string; source?: "ai" | "rule"; notice?: string }[]>([
     {
       role: "assistant",
       content: `Hi! I'm your **study companion**! ✨
 
 Ask me anything about your studies:
 
-• 📊 **Your stats** — "How am I doing?"
-• 📚 **Explain concepts** — "What is photosynthesis?"
-• 🏆 **Leaderboard** — "What's my rank?"
-• 🎯 **Recommendations** — "What should I study?"
-• 💪 **Motivation** — "Motivate me!"`,
+• 📊 **Your stats** - "How am I doing?"
+• 📚 **Explain concepts** - "What is photosynthesis?"
+• 🏆 **Leaderboard** - "What's my rank?"
+• 🎯 **Recommendations** - "What should I study?"
+• 💪 **Motivation** - "Motivate me!"`,
     },
   ]);
   const [input, setInput] = React.useState("");
@@ -137,7 +137,7 @@ Ask me anything about your studies:
           <span style={{ fontSize: 24 }}>💬</span>
           <div>
             <div style={{ fontWeight: 800, fontSize: 15 }}>Study Companion</div>
-            <div style={{ fontSize: 11, opacity: 0.8, fontWeight: 600 }}>academia.io · Real-time data</div>
+            <div style={{ fontSize: 11, opacity: 0.8, fontWeight: 600 }}>academia.io · 🤖 Gemini AI + 🧠 ML insights</div>
           </div>
         </div>
         <button onClick={onClose} style={{ color: "rgba(255,255,255,0.8)", fontSize: 20, lineHeight: 1, cursor: "pointer", background: "none", border: "none" }}>✕</button>
@@ -158,6 +158,16 @@ Ask me anything about your studies:
               <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 3, paddingLeft: 2 }}>
                 <span style={{ fontSize: 12 }}>💬</span>
                 <span style={{ fontSize: 10, fontWeight: 700, color: "var(--ink-soft)", textTransform: "uppercase", letterSpacing: "0.04em" }}>Study Guide</span>
+                {m.source && (
+                  <span style={{
+                    fontSize: 9, fontWeight: 800, padding: "1px 8px", borderRadius: 99,
+                    background: m.source === "ai" ? "rgba(124,58,237,0.12)" : "rgba(16,185,129,0.12)",
+                    color: m.source === "ai" ? "#7C3AED" : "#059669",
+                    textTransform: "uppercase", letterSpacing: "0.04em",
+                  }}>
+                    {m.source === "ai" ? "🤖 Gemini AI" : "🧠 ML Engine"}
+                  </span>
+                )}
               </div>
             )}
             <div style={{
@@ -169,10 +179,13 @@ Ask me anything about your studies:
             }}>
               {m.role === "user" ? m.content : renderMessage(m.content)}
             </div>
+            {m.notice && (
+              <div style={{ marginTop: 4, fontSize: 10.5, fontWeight: 600, color: "#F59E0B", lineHeight: 1.4 }}>{m.notice}</div>
+            )}
           </div>
         ))}
 
-        {/* Quick actions — only show at start */}
+        {/* Quick actions - only show at start */}
         {showQuickActions && messages.length <= 1 && (
           <div style={{ marginTop: 10, display: "flex", flexWrap: "wrap", gap: 6 }}>
             {QUICK_ACTIONS.map((action, i) => (

@@ -1,6 +1,6 @@
 import React from "react";
 
-// academia.io — Lesson player (content slides → quiz → results)
+// academia.io - Lesson player (content slides → quiz → results)
 
 function LessonPlayer({ lessonId, profile, onComplete, onExit, opts }) {
   const lesson = window.findLesson(lessonId);
@@ -36,11 +36,11 @@ function LessonPlayer({ lessonId, profile, onComplete, onExit, opts }) {
             {slideIdx > 0 ? "← Back" : "Exit"}
           </button>
           {last ? (
-            <button className="btn" style={{ background: lesson.color, color: "white" }} onClick={() => setPhase("quiz")}>
+            <button className="btn" style={{ background: lesson.color, color: window.readableTextOn(lesson.color) }} onClick={() => setPhase("quiz")}>
               Start quiz →
             </button>
           ) : (
-            <button className="btn" style={{ background: lesson.color, color: "white" }} onClick={() => setSlideIdx(slideIdx + 1)}>
+            <button className="btn" style={{ background: lesson.color, color: window.readableTextOn(lesson.color) }} onClick={() => setSlideIdx(slideIdx + 1)}>
               Next →
             </button>
           )}
@@ -149,7 +149,7 @@ function LessonPlayer({ lessonId, profile, onComplete, onExit, opts }) {
               return (
                 <button
                   className="btn"
-                  style={{ background: next.color, color: "white" }}
+                  style={{ background: next.color, color: window.readableTextOn(next.color) }}
                   onClick={() => {
                     setPhase("content");
                     setSlideIdx(0);
@@ -390,8 +390,9 @@ function QuestionView({ q, onAnswer, color }) {
       style={{
         padding: "6px 12px",
         borderRadius: 99,
-        background: hintUsed ? "var(--bg-soft)" : "linear-gradient(135deg, #FEF3C7, #FCD34D)",
-        color: hintUsed ? "var(--ink-mute)" : "#92400E",
+        background: hintUsed ? "var(--bg-soft)" : "rgba(245,158,11,0.16)",
+        color: hintUsed ? "var(--ink-mute)" : "#FBBF24",
+        border: hintUsed ? "1px solid transparent" : "1px solid rgba(245,158,11,0.4)",
         fontWeight: 800,
         fontSize: 12,
         display: "inline-flex",
@@ -429,13 +430,13 @@ function QuestionView({ q, onAnswer, color }) {
             };
             if (revealed) {
               if (isCorrect) {
-                style.background = "#ECFDF5";
-                style.borderColor = "#10B981";
-                style.color = "#065F46";
+                style.background = "rgba(16,185,129,0.14)";
+                style.borderColor = "#34D399";
+                style.color = "#6EE7B7";
               } else if (isPicked) {
-                style.background = "#FEF2F2";
-                style.borderColor = "#EF4444";
-                style.color = "#991B1B";
+                style.background = "rgba(239,68,68,0.14)";
+                style.borderColor = "#F87171";
+                style.color = "#FCA5A5";
               } else {
                 style.opacity = 0.5;
               }
@@ -483,8 +484,8 @@ function QuestionView({ q, onAnswer, color }) {
               transition: "all 0.15s",
             };
             if (revealed) {
-              if (isCorrect) { style.background = "#ECFDF5"; style.borderColor = "#10B981"; style.color = "#065F46"; }
-              else if (isPicked) { style.background = "#FEF2F2"; style.borderColor = "#EF4444"; style.color = "#991B1B"; }
+              if (isCorrect) { style.background = "rgba(16,185,129,0.14)"; style.borderColor = "#34D399"; style.color = "#6EE7B7"; }
+              else if (isPicked) { style.background = "rgba(239,68,68,0.14)"; style.borderColor = "#F87171"; style.color = "#FCA5A5"; }
               else style.opacity = 0.5;
             } else if (isPicked) { style.borderColor = color; style.background = `${color}11`; }
             return (
@@ -528,9 +529,9 @@ function QuestionView({ q, onAnswer, color }) {
             style={{
               flex: 1,
               padding: "14px 18px",
-              border: `2px solid ${revealed ? (norm(text) === norm(q.answer) ? "#10B981" : "#EF4444") : "var(--line-strong)"}`,
+              border: `2px solid ${revealed ? (norm(text) === norm(q.answer) ? "#34D399" : "#F87171") : "var(--line-strong)"}`,
               borderRadius: 14,
-              background: revealed ? (norm(text) === norm(q.answer) ? "#ECFDF5" : "#FEF2F2") : "var(--bg-soft)",
+              background: revealed ? (norm(text) === norm(q.answer) ? "rgba(16,185,129,0.14)" : "rgba(239,68,68,0.14)") : "var(--bg-soft)",
               fontSize: 18,
               fontWeight: 700,
               outline: "none",
@@ -538,7 +539,7 @@ function QuestionView({ q, onAnswer, color }) {
           />
           <button
             className="btn"
-            style={{ background: color, color: "white" }}
+            style={{ background: color, color: window.readableTextOn(color) }}
             disabled={!text.trim() || revealed}
             onClick={() => reveal(norm(text) === norm(q.answer), text)}
           >
@@ -546,7 +547,7 @@ function QuestionView({ q, onAnswer, color }) {
           </button>
         </div>
         {revealed && norm(text) !== norm(q.answer) && (
-          <p style={{ marginTop: 14, color: "#991B1B", fontWeight: 700 }}>Correct answer: <b>{q.answer}</b></p>
+          <p style={{ marginTop: 14, color: "#F87171", fontWeight: 700 }}>Correct answer: <b>{q.answer}</b></p>
         )}
       </div>
     );

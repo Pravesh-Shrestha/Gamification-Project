@@ -1,6 +1,6 @@
 import React from "react";
 
-// academia.io — School Admin dashboard
+// academia.io - School Admin dashboard
 
 function AdminApp({ user, onLogout }) {
   const [db, setDb] = React.useState(() => window.DB.load());
@@ -60,7 +60,7 @@ function AdminApp({ user, onLogout }) {
                         <div className="muted" style={{ fontSize: 11, fontWeight: 700 }}>{c.grade} · {c.studentIds.length} students</div>
                       </div>
                       <div style={{ textAlign: "right" }}>
-                        <div style={{ fontSize: 12, fontWeight: 700 }}>{t ? t.name : "—"}</div>
+                        <div style={{ fontSize: 12, fontWeight: 700 }}>{t ? t.name : "-"}</div>
                         <div className="muted" style={{ fontSize: 10, fontWeight: 700 }}>teacher</div>
                       </div>
                     </div>
@@ -144,7 +144,7 @@ function UserTable({ title, users, db, onCreate, onChange, createLabel, showStat
                   </div>
                 </td>
                 <td className="muted" style={{ fontWeight: 600 }}>{u.email}</td>
-                {showStats && <td className="muted" style={{ fontWeight: 700 }}>{u.grade || "—"}</td>}
+                {showStats && <td className="muted" style={{ fontWeight: 700 }}>{u.grade || "-"}</td>}
                 {showStats && <td style={{ fontWeight: 800 }}>{(u.xp || 0).toLocaleString()}</td>}
                 {showStats && <td style={{ fontWeight: 800, color: "#F59E0B" }}>🔥 {u.streak || 0}</td>}
                 {showStats && <td className="muted" style={{ fontWeight: 700 }}>{(u.lessonsCompleted || []).length}</td>}
@@ -211,7 +211,7 @@ function ClassesTab({ user, db, onChange, school }) {
                 </button>
               </div>
               <div style={{ marginTop: 12, display: "grid", gap: 6 }}>
-                <Pill label="Teacher" value={teacher ? teacher.name : "—"} />
+                <Pill label="Teacher" value={teacher ? teacher.name : "-"} />
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
                   <Pill label="Students" value={cStudents.length} />
                   <Pill label="Class XP" value={totalXp.toLocaleString()} />
@@ -357,17 +357,17 @@ function Leaderboard({ students, highlightId = undefined }: { students: any[]; h
               gap: 12,
               padding: "10px 14px",
               borderRadius: 10,
-              background: isMe ? "linear-gradient(135deg, #FEF3C7, #FDE68A)" : "var(--bg-soft)",
-              border: isMe ? "2px solid #F59E0B" : "1px solid transparent",
-              color: isMe ? "#78350F" : "inherit",
+              background: isMe ? "rgba(245,158,11,0.14)" : "var(--bg-soft)",
+              border: isMe ? "2px solid rgba(245,158,11,0.5)" : "1px solid transparent",
+              color: isMe ? "var(--ink)" : "inherit",
             }}
           >
-            <div style={{ fontFamily: "var(--font-display)", fontWeight: 800, color: isMe ? "#B45309" : "var(--ink-mute)", fontSize: 14 }}>
+            <div style={{ fontFamily: "var(--font-display)", fontWeight: 800, color: isMe ? "#FBBF24" : "var(--ink-mute)", fontSize: 14 }}>
               {medal || `#${i + 1}`}
             </div>
             <div style={{ width: 32, height: 32, borderRadius: 99, background: "var(--bg-card)", display: "grid", placeItems: "center", fontSize: 16, color: "var(--ink)" }}>{avatarMap[s.avatar] || "🎓"}</div>
-            <div style={{ fontWeight: 800, fontSize: 13 }}>{s.name} {isMe && <span style={{ fontSize: 10, fontWeight: 800, background: "#F59E0B", color: "white", padding: "1px 8px", borderRadius: 99, marginLeft: 4 }}>YOU</span>}</div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: isMe ? "#B45309" : "#F59E0B" }}>🔥 {s.streak || 0}</div>
+            <div style={{ fontWeight: 800, fontSize: 13 }}>{s.name} {isMe && <span style={{ fontSize: 10, fontWeight: 800, background: "#F59E0B", color: "#0B0D17", padding: "1px 8px", borderRadius: 99, marginLeft: 4 }}>YOU</span>}</div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: isMe ? "#FBBF24" : "#F59E0B" }}>🔥 {s.streak || 0}</div>
             <div style={{ fontFamily: "var(--font-display)", fontWeight: 700 }}>{(s.xp || 0).toLocaleString()} XP</div>
           </div>
         );

@@ -2,7 +2,7 @@ import React from "react";
 import { LogOut, Flame, ArrowUpCircle, MessageSquare } from "lucide-react";
 import { engine } from "../../services/api";
 
-// academia.io — Student app (gamified core)
+// academia.io - Student app (gamified core)
 // Uses the DB profile for `user`. All mutations write back to DB.
 
 function StudentApp({ user: initialUser, onLogout }) {
@@ -50,18 +50,77 @@ function StudentApp({ user: initialUser, onLogout }) {
           lessonsCompleted: data.recentActivity.map((a) => a.lessonId),
         }));
         setDbAssignments(data.assignments || []);
+
+        // Keep the local demo-DB mirror in sync with the real backend profile so
+        // the gamified class features (leaderboard, class feed, quests) reflect
+        // persisted data instead of a stale/reset copy.
+        try {
+          const db = window.DB.load();
+          const gm = data.gamification || {};
+          const rawGrade = user.grade || "";
+          const gradeLabel = /^grade/i.test(rawGrade)
+            ? rawGrade
+            : (rawGrade ? `Grade ${rawGrade}` : "Grade 5");
+          const schoolKey = (user.schoolId || "sch_galaxy").replace("sch_", "");
+          let local = window.DB.userById(db, user.id);
+          const profilePatch = {
+            role: "student",
+            name: user.name,
+            avatar: user.avatar || "panda",
+            email: user.email,
+            schoolId: user.schoolId,
+            grade: gradeLabel,
+            createdBy: `u_admin_${schoolKey}`,
+            createdAt: local ? local.createdAt : Date.now(),
+            xp: gm.xp || 0,
+            streak: gm.streak || 0,
+            streakDays: user.streakDays || [],
+            lastActiveDay: user.lastActiveDay || (window.Engine ? window.Engine.todayKey() : null),
+            lessonsCompleted: (data.recentActivity || []).map((a) => a.lessonId),
+            perfectQuizzes: gm.perfectQuizzes || 0,
+            focusMinutes: gm.focusMinutes || 0,
+            treesGrown: gm.treesGrown || 0,
+            badges: (data.badges || []).map((b) => b.id),
+            todayXP: user.todayXP || {},
+            dailyGoal: gm.dailyGoal || 50,
+            cosmetics: data.cosmetics || [],
+            questsState: user.questsState || null,
+            combos: local ? (local.combos || 0) : 0,
+          };
+          if (local) {
+            Object.assign(local, profilePatch);
+          } else {
+            window.DB.createUser(db, profilePatch);
+            local = window.DB.userById(db, user.id);
+          }
+          // Put the student in a matching class so leaderboard/feed render.
+          const schoolClasses = db.classes.filter((c) => c.schoolId === user.schoolId);
+          const match = schoolClasses.find((c) => c.grade === gradeLabel) || schoolClasses[0];
+          if (match && local && !match.studentIds.includes(user.id)) {
+            match.studentIds.push(user.id);
+          }
+          window.DB.save(db);
+        } catch (e) {
+          console.error("Failed to hydrate demo DB:", e);
+        }
       })
       .catch((err) => console.error("Failed to load dashboard data from server:", err));
   }, []);
 
   React.useEffect(() => {
-    document.documentElement.setAttribute("data-theme", tweaks.theme || "light");
+    document.documentElement.setAttribute("data-theme", tweaks.theme || "dark");
   }, [tweaks.theme]);
 
   function persist(u) {
     const db = window.DB.load();
-    const found = db.users.find((x) => x.id === u.id);
+    let found = db.users.find((x) => x.id === u.id);
     if (found) Object.assign(found, u);
+    else window.DB.createUser(db, { ...u });
+    // Prune impossible "level" feed events (a level higher than the user's
+    // actual level can only be stale data from an old bug). Keeps the class
+    // feed from ever showing "reached level X" that contradicts the profile.
+    const curLvl = window.Engine ? window.Engine.levelFromXP(u.xp || 0) : 0;
+    db.feed = (db.feed || []).filter(e => !(e.userId === u.id && e.kind === "level" && e.payload && e.payload.level > curLvl));
     window.DB.save(db);
     setUser(u);
   }
@@ -85,15 +144,20 @@ function StudentApp({ user: initialUser, onLogout }) {
     let apiBadges = [];
     let apiLvl = 1;
     let allQuestsDone = [];
+    let serverOk = false;
+    let alreadyCompleted = false;
+    let serverQuestsState = null;
 
     try {
       const apiRes = await engine.completeLesson(lessonId, correct, total, lesson?.subjectId || "math", tweaks.xpMultiplier || 1, comboMax);
+      serverOk = true;
+      alreadyCompleted = !!apiRes.alreadyCompleted;
       apiXp = apiRes.xpEarned;
       apiStreak = apiRes.newStreak;
       apiBadges = apiRes.newBadges || [];
       apiLvl = apiRes.level;
       if (apiRes.questsState) {
-        user.questsState = JSON.parse(apiRes.questsState);
+        try { serverQuestsState = JSON.parse(apiRes.questsState); } catch { serverQuestsState = null; }
       }
       allQuestsDone = apiRes.completedQuests || [];
     } catch (err) {
@@ -101,25 +165,34 @@ function StudentApp({ user: initialUser, onLogout }) {
     }
 
     const next = { ...user };
+    if (serverQuestsState) next.questsState = serverQuestsState;
     const res = window.Engine.processLessonComplete(next, lessonId, correct, total, { xpMultiplier: tweaks.xpMultiplier || 1 });
 
-    if (apiXp > 0) {
-      next.xp = user.xp + apiXp;
-      next.streak = apiStreak;
+    // The backend is the source of truth for XP / streak / todayXP. The local
+    // engine above always awards XP, but re-completing an already-earned lesson
+    // ("review") awards 0 XP on the server - so overwrite the local numbers with
+    // the server's actual award to avoid inflating the profile (and avoid fake
+    // level-ups on reviews).
+    if (serverOk) {
+      const tk = window.Engine.todayKey();
+      next.xp = user.xp + (apiXp || 0);
+      next.streak = apiStreak != null ? apiStreak : next.streak;
+      next.todayXP = { ...(user.todayXP || {}) };
+      if (apiXp > 0) next.todayXP[tk] = (next.todayXP[tk] || 0) + apiXp;
     }
 
-    // Apply combo bonus on top
+    // Apply combo bonus on top (only for a first completion or offline play)
     const comboMult = window.Gamify.comboMultiplier(comboMax);
     const comboBonus = comboMult > 1 ? Math.round(res.xpGain * (comboMult - 1)) : 0;
-    if (comboBonus > 0 && apiXp === 0) {
+    if (comboBonus > 0 && !alreadyCompleted) {
       next.xp += comboBonus;
       const tk = window.Engine.todayKey();
       next.todayXP[tk] = (next.todayXP[tk] || 0) + comboBonus;
       res.log.push(`Combo ×${comboMult}: +${comboBonus} bonus XP`);
     }
 
-    // Quests (local fallback if server didn't run)
-    if (apiXp === 0) {
+    // Quests - local fallback only when the server never ran
+    if (!serverOk) {
       const q1 = window.Gamify.applyQuestsForLesson(next, lessonId, correct === total, lesson?.subjectId, comboMax);
       const q2 = window.Gamify.applyQuestsForXp(next, res.xpGain + comboBonus);
       const questXp = q1.bonusXp + q2.bonusXp;
@@ -133,7 +206,9 @@ function StudentApp({ user: initialUser, onLogout }) {
     }
 
     logEvents(res.log);
-    pushToast({ icon: "⭐", title: `+${apiXp > 0 ? apiXp : (res.xpGain + comboBonus)} XP`, body: `${correct}/${total} correct${comboMax >= 3 ? ` · ×${comboMult} combo` : ""}` });
+    pushToast(alreadyCompleted
+      ? { icon: "📚", title: "Lesson reviewed", body: `No XP this time - you've already earned this lesson. Streak kept!` }
+      : { icon: "⭐", title: `+${apiXp > 0 ? apiXp : (res.xpGain + comboBonus)} XP`, body: `${correct}/${total} correct${comboMax >= 3 ? ` · ×${comboMult} combo` : ""}` });
 
     for (const bId of apiBadges) {
       const bDef = window.DB.load().badges?.find(x => x.id === bId) || { name: bId, desc: "Unlocked!", icon: "🏅" };
@@ -152,8 +227,8 @@ function StudentApp({ user: initialUser, onLogout }) {
       window.FX && window.FX.fire({ count: 60, origin: { x: 0.5, y: 0.5 } });
     }
 
-    // Lootbox roll
-    if (correct === total || Math.random() < 0.5) {
+    // Lootbox roll (first completion only)
+    if (!alreadyCompleted && (correct === total || Math.random() < 0.5)) {
       const result = window.Gamify.rollLootbox(next.cosmetics || []);
       if (result.duplicate) {
         next.xp += result.xpInstead;
@@ -170,7 +245,7 @@ function StudentApp({ user: initialUser, onLogout }) {
     if (newLvl > window.Engine.levelFromXP(user.xp)) {
       pushToast({ icon: <ArrowUpCircle size={22} color="#10B981" />, title: `Level ${newLvl}!`, body: "You're getting stronger.", kind: "badge" });
       window.DB.pushFeed(window.DB.load(), { userId: user.id, kind: "level", payload: { level: newLvl } });
-      window.DB.notify(window.DB.load(), user.id, { kind: "level", title: `Level ${newLvl}!`, body: "You're getting stronger — keep it up." });
+      window.DB.notify(window.DB.load(), user.id, { kind: "level", title: `Level ${newLvl}!`, body: "You're getting stronger - keep it up." });
       window.FX && window.FX.fire({ count: 150, origin: { x: 0.5, y: 0.5 }, spread: 90 });
       window.FX && window.FX.Sound.levelUp();
     }
@@ -187,11 +262,12 @@ function StudentApp({ user: initialUser, onLogout }) {
   async function handleFocusComplete(minutes) {
     let apiXp = 0;
     let serverQuests = [];
+    let serverQuestsState = null;
     try {
       const apiRes = await engine.completeFocus(minutes);
       apiXp = apiRes.xpEarned;
       if (apiRes.questsState) {
-        user.questsState = JSON.parse(apiRes.questsState);
+        try { serverQuestsState = JSON.parse(apiRes.questsState); } catch { serverQuestsState = null; }
       }
       serverQuests = apiRes.completedQuests || [];
     } catch (err) {
@@ -199,12 +275,16 @@ function StudentApp({ user: initialUser, onLogout }) {
     }
 
     const next = { ...user };
+    if (serverQuestsState) next.questsState = serverQuestsState;
     const res = window.Engine.processFocusComplete(next, minutes, { xpMultiplier: tweaks.xpMultiplier || 1 });
 
     if (apiXp > 0) {
       next.xp = user.xp + apiXp;
       next.focusMinutes = user.focusMinutes + minutes;
       next.treesGrown = user.treesGrown + 1;
+      const tk = window.Engine.todayKey();
+      next.todayXP = { ...(user.todayXP || {}) };
+      next.todayXP[tk] = (next.todayXP[tk] || 0) + apiXp;
     }
 
     // Quests (local fallback if server didn't run)
@@ -223,7 +303,7 @@ function StudentApp({ user: initialUser, onLogout }) {
     }
 
     logEvents(res.log);
-    pushToast({ icon: "🌳", title: `+${apiXp > 0 ? apiXp : res.xp} XP`, body: `${minutes} min focused — tree grown` });
+    pushToast({ icon: "🌳", title: `+${apiXp > 0 ? apiXp : res.xp} XP`, body: `${minutes} min focused - tree grown` });
     for (const b of res.newBadges) pushToast({ icon: b.icon, title: `Badge: ${b.name}`, body: b.desc, kind: "badge" });
     
     const finalQuests = apiXp > 0 ? serverQuests : localQuests;
@@ -286,7 +366,7 @@ function StudentApp({ user: initialUser, onLogout }) {
             actions={
               <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
                 {recommended ? (
-                  <button className="btn" style={{ background: recommended.color || "var(--accent)", color: "white", fontSize: 13, padding: "8px 16px" }} onClick={() => setOpenLesson(recommended.id)}>
+                  <button className="btn" style={{ background: recommended.color || "var(--accent)", color: window.readableTextOn(recommended.color), fontSize: 13, padding: "8px 16px" }} onClick={() => setOpenLesson(recommended.id)}>
                     Continue: {recommended.title} →
                   </button>
                 ) : (

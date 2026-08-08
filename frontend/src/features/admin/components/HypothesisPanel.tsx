@@ -85,7 +85,7 @@ export function HypothesisPanel({ stats }: { stats: HypothesisStats }) {
           </div>
 
           {/* Statistical Validation */}
-          <div style={{ background: "rgba(0,0,0,0.02)", border: "1px solid var(--border)", borderRadius: "var(--radius-sm)", padding: 16, marginBottom: 16 }}>
+          <div style={{ background: "var(--bg-soft)", border: "1px solid var(--border)", borderRadius: "var(--radius-sm)", padding: 16, marginBottom: 16 }}>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, fontWeight: 700, color: "var(--ink)", marginBottom: 12 }}>
               <span>Outcomes Significance</span>
               <span style={{ color: t.significant ? "#10B981" : "#EF4444" }}>
@@ -109,7 +109,7 @@ export function HypothesisPanel({ stats }: { stats: HypothesisStats }) {
           </div>
 
           {/* Predictive Model */}
-          <div style={{ background: "rgba(0,0,0,0.02)", border: "1px solid var(--border)", borderRadius: "var(--radius-sm)", padding: 16 }}>
+          <div style={{ background: "var(--bg-soft)", border: "1px solid var(--border)", borderRadius: "var(--radius-sm)", padding: 16 }}>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, fontWeight: 700, color: "var(--ink)", marginBottom: 10 }}>
               <span>Predictive Engagement Model</span>
               <span style={{ color: "#3B82F6" }}>Confidence Score: {Math.round(reg.r2 * 100)}%</span>
@@ -144,7 +144,7 @@ export function HypothesisPanel({ stats }: { stats: HypothesisStats }) {
         <div>
           <h4 style={{ fontSize: 18, fontWeight: 800, margin: 0, color: "var(--ink)", marginBottom: 6 }}>Ethical Design & Digital Well-being</h4>
           <p style={{ fontSize: 14, color: "var(--ink-muted)", margin: 0, lineHeight: 1.6, maxWidth: 900 }}>
-            Addressing the risks of over-gamification through design-based safeguards. The system implements time-limiter protocols—such as XP caps, active verification for streaks, and rest notifications—designed to balance motivational mechanics with healthy learning limits, actively discouraging unhealthy study behavior.
+            Addressing the risks of over-gamification through design-based safeguards. The system implements time-limiter protocols - such as XP caps, active verification for streaks, and rest notifications - designed to balance motivational mechanics with healthy learning limits, actively discouraging unhealthy study behavior.
           </p>
         </div>
       </div>

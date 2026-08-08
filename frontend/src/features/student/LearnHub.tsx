@@ -1,13 +1,13 @@
-// academia.io — Learn screen (all subjects + skill tree)
+// academia.io - Learn screen (all subjects + skill tree)
 
 function LearnHub({ profile, onOpenLesson, onOpenSubject }) {
   return (
     <div style={{ display: "grid", gap: 24 }}>
       <div>
-        <div className="eyebrow">Learn</div>
-        <h1>Pick a subject</h1>
-        <p className="soft" style={{ maxWidth: 540, marginTop: 6 }}>
-          Each subject is a tree of small lessons. Finish a lesson to earn XP, unlock the next one and grow your streak.
+        <div className="pixel-badge" style={{ marginBottom: 8 }}>Skill Quest Map ✦</div>
+        <h1 className="font-pixel-sans" style={{ color: "#FFF", fontSize: 28 }}>Pick a Subject Path</h1>
+        <p style={{ color: "#9CA3AF", maxWidth: 540, marginTop: 6, fontSize: 14 }}>
+          Each subject is a tree of interactive micro-lessons. Finish lessons to earn XP, level up, and unlock daily lootboxes.
         </p>
       </div>
 

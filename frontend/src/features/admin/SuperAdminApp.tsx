@@ -224,7 +224,7 @@ function SchoolsTab({ schools, users, onEdit, onRefresh }) {
             </div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12 }}>
-            <Pill label="Admin" value={sAdmin ? sAdmin.name : "—"} />
+            <Pill label="Admin" value={sAdmin ? sAdmin.name : "-"} />
             <Pill label="Teachers" value={sTeachers.length} />
             <Pill label="Students" value={sStudents.length} />
           </div>
@@ -273,14 +273,14 @@ function SchoolsTab({ schools, users, onEdit, onRefresh }) {
                       </div>
                       <div>
                         <div style={{ fontWeight: 700 }}>{u.name}</div>
-                        <div className="muted" style={{ fontSize: 11, fontWeight: 600 }}>{u.email || "—"}</div>
+                        <div className="muted" style={{ fontSize: 11, fontWeight: 600 }}>{u.email || "-"}</div>
                       </div>
                     </div>
                   </td>
                   <td><span style={{ background: "var(--bg-soft)", padding: "3px 10px", borderRadius: 99, fontSize: 11, fontWeight: 800, textTransform: "capitalize" }}>{u.role.replace("_", " ")}</span></td>
-                  <td className="muted" style={{ fontWeight: 700 }}>{u.grade || "—"}</td>
+                  <td className="muted" style={{ fontWeight: 700 }}>{u.grade || "-"}</td>
                   <td className="muted" style={{ fontWeight: 700, fontSize: 12 }}>
-                    {u.role === "student" ? `${u.xp || 0} XP · 🔥 ${u.streak || 0}` : (u.role === "teacher" ? `${u.xp || 0} XP` : "—")}
+                    {u.role === "student" ? `${u.xp || 0} XP · 🔥 ${u.streak || 0}` : (u.role === "teacher" ? `${u.xp || 0} XP` : "-")}
                   </td>
                   <td style={{ padding: "8px 12px" }}>
                     <button onClick={() => onEdit(u)} className="muted" style={{ fontSize: 13, padding: "4px 8px" }}>✏️</button>
@@ -318,9 +318,9 @@ function SchoolsTab({ schools, users, onEdit, onRefresh }) {
                     <div className="muted" style={{ fontSize: 12, fontWeight: 700 }}>{s.city}</div>
                   </div>
                 </div>
-                <div className="muted" style={{ fontSize: 12, fontStyle: "italic", marginBottom: 14 }}>"{s.motto || "—"}"</div>
+                <div className="muted" style={{ fontSize: 12, fontStyle: "italic", marginBottom: 14 }}>"{s.motto || "-"}"</div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8 }}>
-                  <Pill label="Admin" value={sAdmin ? sAdmin.name : "—"} />
+                  <Pill label="Admin" value={sAdmin ? sAdmin.name : "-"} />
                   <Pill label="Teachers" value={sTeachers.length} />
                   <Pill label="Students" value={sStudents.length} />
                 </div>
@@ -402,14 +402,14 @@ function UsersTab({ users, schools, onRefresh, onEdit }) {
                     </div>
                     <div>
                       <div style={{ fontWeight: 700 }}>{u.name}</div>
-                      <div className="muted" style={{ fontSize: 11, fontWeight: 600 }}>{u.email || "—"}</div>
+                      <div className="muted" style={{ fontSize: 11, fontWeight: 600 }}>{u.email || "-"}</div>
                     </div>
                   </div>
                 </td>
                 <td><span style={{ background: "var(--bg-soft)", padding: "3px 10px", borderRadius: 99, fontSize: 11, fontWeight: 800, textTransform: "capitalize" }}>{u.role.replace("_", " ")}</span></td>
-                <td className="muted" style={{ fontWeight: 700 }}>{schoolMap[u.schoolId] || "—"}</td>
+                <td className="muted" style={{ fontWeight: 700 }}>{schoolMap[u.schoolId] || "-"}</td>
                 <td className="muted" style={{ fontWeight: 700, fontSize: 12 }}>
-                  {u.role === "student" ? `${u.xp || 0} XP · 🔥 ${u.streak || 0}` : (u.role === "teacher" ? `${u.xp || 0} XP` : "—")}
+                  {u.role === "student" ? `${u.xp || 0} XP · 🔥 ${u.streak || 0}` : (u.role === "teacher" ? `${u.xp || 0} XP` : "-")}
                 </td>
                 <td style={{ padding: "8px 12px", whiteSpace: "nowrap" }}>
                   <button onClick={() => onEdit(u)} className="muted" style={{ fontSize: 13, padding: "4px 6px" }} title="Edit">✏️</button>
@@ -487,7 +487,7 @@ function CreateUserModal({ role, schools, onClose, onCreated }) {
             <label className="eyebrow" style={{ display: "block", marginBottom: 6 }}>School</label>
             <select value={schoolId} onChange={e => setSchoolId(e.target.value)}
               style={{ width: "100%", padding: "12px 14px", borderRadius: 10, border: "1.5px solid var(--line)", background: "var(--bg-card)", fontWeight: 600, fontSize: 14, appearance: "auto" }}>
-              <option value="">— Select school —</option>
+              <option value=""> -  Select school  - </option>
               {schools.map(s => <option key={s.id} value={s.id}>{s.name} ({s.city})</option>)}
             </select>
           </div>
@@ -656,7 +656,7 @@ function EditUserModal({ user, schools, onClose, onUpdated }) {
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)", display: "grid", placeItems: "center", zIndex: 999, padding: 20 }}>
       <div className="card" style={{ maxWidth: 440, width: "100%", padding: 28 }}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 20 }}>
-          <h2 style={{ margin: 0, fontSize: 20 }}>Edit user — {user.name}</h2>
+          <h2 style={{ margin: 0, fontSize: 20 }}>Edit user - {user.name}</h2>
           <button onClick={onClose} style={{ fontSize: 20, color: "var(--muted)" }}>✕</button>
         </div>
         <form onSubmit={handleSave}>

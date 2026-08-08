@@ -1,6 +1,6 @@
 import React from "react";
 
-// academia.io — Onboarding screen
+// academia.io - Onboarding screen
 
 function Onboarding({ onDone }) {
   const [step, setStep] = React.useState(0);

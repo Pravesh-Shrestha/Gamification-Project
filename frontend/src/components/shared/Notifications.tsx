@@ -1,9 +1,9 @@
 import React from "react";
 import * as Lucide from "lucide-react";
 
-// academia.io — Notifications bell + dropdown + equipped avatar component
+// academia.io - Notifications bell + dropdown + equipped avatar component
 
-// EquippedAvatar — renders user avatar with their equipped frame/hat/pet
+// EquippedAvatar - renders user avatar with their equipped frame/hat/pet
 function EquippedAvatar({ user, size = 36, showLevel = false }) {
   const equipped = user.equipped || {};
   const frame = equipped.frame && window.Gamify.COSMETICS.find((c) => c.id === equipped.frame);
