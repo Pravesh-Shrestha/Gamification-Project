@@ -101,3 +101,4 @@ docker-compose.override.yml
 ehthumbs.db
 Desktop.ini
 frontend/assets/banner.mp4
+banner.mp4

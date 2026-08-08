@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Target, Trophy, Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { Logo } from "../../components/shared/Components";
 
 function Login({ onLogin, onBack }) {
   const [email, setEmail] = React.useState("");
@@ -261,5 +262,4 @@ function LoginPanelShapes() {
     </div>
   );
 }
-
-window.Login = Login;
+(window as any).Login = Login;
