@@ -56,7 +56,7 @@ function StatTile({ label, value, sub, color }) {
   );
 }
 
-function Logo({ size = 36, light = false }) {
+export function Logo({ size = 36, light = false }) {
   return (
     <div className="brand" onClick={() => window.dispatchEvent(new CustomEvent("aio:nav", { detail: "home" }))} style={{ display: "flex", alignItems: "center", gap: 10 }}>
       <div style={{
