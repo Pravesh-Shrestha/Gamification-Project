@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Database Schema (Prisma + PostgreSQL)
+// academia.io - Database Schema (Prisma + PostgreSQL)
 // ============================================================
 
 generator client {
@@ -45,7 +45,7 @@ model User {
   // ── Gamification Stats ──
   xp              Int     @default(0)
   streak          Int     @default(0)
-  lastActiveDate  String? // "2026-06-20" — no timezone headaches
+  lastActiveDate  String? // "2026-06-20" - no timezone headaches
   streakDays      String  @default("[]") // JSON array of date strings
   perfectQuizzes  Int     @default(0)
   focusMinutes    Int     @default(0)
@@ -201,7 +201,7 @@ model ChatMessage {
 }
 
 // ─── Interaction Log (ML-friendly) ────────────────────────
-// Every user action is logged for ML analysis — quiz attempts,
+// Every user action is logged for ML analysis - quiz attempts,
 // time spent, focus sessions, page views, etc.
 model InteractionLog {
   id        String   @id @default(cuid())
@@ -235,7 +235,7 @@ model UploadedContent {
 }
 
 // ─── Class ────────────────────────────────────────────────
-// School classes/groups — "Grade 1", "Grade 2", ..., "Grade 8"
+// School classes/groups - "Grade 1", "Grade 2", ..., "Grade 8"
 model Class {
   id       String @id @default(cuid())
   name     String // e.g. "Grade 6", "Grade 6A"

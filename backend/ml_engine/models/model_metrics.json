@@ -1,0 +1,61 @@
+{
+  "dataset_size": 470,
+  "data_source": "database",
+  "test_samples": 141,
+  "classification": {
+    "model_type": "Random Forest Classifier (Scikit-Learn, Test Set Evaluation)",
+    "accuracy": 99.29,
+    "precision": 100.0,
+    "recall": 97.92,
+    "f1_score": 98.95,
+    "confusion_matrix": [
+      [
+        93,
+        0
+      ],
+      [
+        1,
+        47
+      ]
+    ],
+    "feature_importance": {
+      "Accuracy": 25.61,
+      "Consistency": 12.67,
+      "Focus Time": 7.18,
+      "Score Trend": 39.58,
+      "Streak": 14.96
+    }
+  },
+  "regression": {
+    "model_type": "Ridge Linear Regressor (alpha=2.5, Test Set Evaluation)",
+    "r2_score": 0.58,
+    "mse": 91.11,
+    "rmse": 9.55,
+    "formula": "PredictedScore = 19.85 + 40.82*Acc + 0.88*Cons + 4.18*Focus + 1.69*Streak"
+  },
+  "clustering": {
+    "algorithm": "K-Means (K=3)",
+    "centroids": [
+      [
+        0.8767511882363964,
+        0.3730158730158731,
+        0.892289562289562
+      ],
+      [
+        0.6713245890974586,
+        0.05649103747963069,
+        0.09363751584283886
+      ],
+      [
+        0.7890046166630704,
+        0.07275132275132276,
+        0.4880864197530864
+      ]
+    ],
+    "cluster_names": {
+      "0": "High-Achieving Explorers",
+      "1": "Steady Learners",
+      "2": "Struggling / At Risk"
+    }
+  }
+}

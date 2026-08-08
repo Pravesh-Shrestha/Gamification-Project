@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Admin Routes (Full CRUD)
+// academia.io - Admin Routes (Full CRUD)
 // ============================================================
 
 import { Router } from "express";

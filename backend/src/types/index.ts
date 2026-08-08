@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Shared Types
+// academia.io - Shared Types
 // ============================================================
 
 import { Request } from "express";

@@ -1,66 +1,82 @@
-/* academia.io — design tokens & shared styles */
+/* academia.io - Codédex Dark Cosmic Theme & Design System */
 
 :root {
-  --bg: #fffaf1;            /* Alloria background (cream) */
-  --bg-card: #FFFCF7;       /* Alloria card background */
-  --bg-soft: #fff1dc;       /* Alloria cream / soft bg */
-  --ink: #1f1840;           /* Alloria ink (deep dark navy) */
-  --ink-soft: #5a5475;      /* Alloria ink-soft */
-  --ink-mute: #8a86a0;      /* Alloria ink-mute */
-  --line: #ece6d6;          /* Alloria line */
-  --line-strong: #ece6d6;   /* Alloria line strong */
+  --bg: #0b0d17;            /* Codédex Deep Cosmic Dark */
+  --bg-card: #131728;       /* Codédex Card surface */
+  --bg-soft: #1b2035;       /* Codédex Interactive / Soft surface */
+  --ink: #f3f4f6;           /* Codédex Crisp Light text */
+  --ink-soft: #9ca3af;      /* Codédex Soft text */
+  --ink-mute: #6b7280;      /* Codédex Muted text */
+  --line: #22273e;          /* Codédex Line border */
+  --line-strong: #2f3654;   /* Codédex Strong line */
 
-  --primary: #6C3CE1;       /* Vibrant Gamified Purple */
-  --primary-light: #8B5CF6; /* Light purple */
-  --primary-dark: #1E0A3C;  /* Deep purple shadow */
-  
+  --primary: #FFC700;       /* Codédex Signature Yellow */
+  --primary-hover: #FFD438;
+  --primary-light: #FFE066;
+  --primary-dark: #CCA000;
+
+  --accent-purple: #6C3CE1;
   --accent-pink: #EC4899;
   --accent-green: #10B981;
-  --accent-orange: #F59E0B;
-  --accent-coral: #EF4444;
   --accent-blue: #3B82F6;
-  --accent-mint: #14B8A6;
-  --accent-purple: #A855F7;
   --accent-amber: #F59E0B;
+  --accent-cyan: #00F2FE;
 
-  --gradient-brand: linear-gradient(135deg, #1E0A3C 0%, #3B1D8F 50%, #6C3CE1 100%);
-  --gradient-cta: linear-gradient(135deg, #EC4899, #8B5CF6);
-  --gradient-warm: linear-gradient(135deg, #FF8A4C, #F59E0B);
+  /* ── Semantic aliases (color-theory: high-contrast on dark surfaces) ──
+     The admin/research dashboards reference these tokens; they were missing
+     from the stylesheet, which made borders invisible and "muted" text render
+     at full brightness. These aliases adapt automatically when themes override
+     the base --bg / --ink / --line tokens. */
+  --border: var(--line);            /* visible card borders */
+  --border-strong: var(--line-strong);
+  --border-glow: #433d78;           /* modal / emphasis border (violet-tinted) */
+  --brand: #A78BFA;                 /* research brand violet (readable on navy) */
+  --brand-strong: #7C3AED;
+  --bg-body: var(--bg);             /* page background */
+  --bg-card2: #242048;              /* secondary card surface (between card & soft) */
+  --accent-coral: #DC2626;          /* coral/red accent - dark enough for white text (~5:1) */
+  --muted: var(--ink-mute);         /* muted text alias */
+  --ink-dim: var(--ink-mute);       /* dim text alias */
+  --ink-muted: var(--ink-mute);     /* muted text alias (older components) */
 
-  --radius: 20px;
-  --radius-sm: 12px;
-  --radius-lg: 28px;
-  --radius-xl: 40px;
+  --gradient-brand: linear-gradient(135deg, #1C0A35 0%, #35136B 50%, #6C3CE1 100%);
+  --gradient-cta: linear-gradient(135deg, #FFC700 0%, #FF9900 100%);
+  --gradient-club: linear-gradient(135deg, #120924 0%, #2e125c 50%, #15092b 100%);
+
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-lg: 24px;
+  --radius-xl: 36px;
   
-  --shadow-sm: 0 1px 2px rgba(31, 24, 64, 0.04), 0 1px 3px rgba(31, 24, 64, 0.05);
-  --shadow: 0 4px 14px rgba(31, 24, 64, 0.06), 0 1px 3px rgba(31, 24, 64, 0.04);
-  --shadow-lg: 0 12px 32px rgba(31, 24, 64, 0.1), 0 2px 6px rgba(31, 24, 64, 0.05);
-  --shadow-xl: 0 16px 48px rgba(31, 24, 64, 0.12), 0 4px 12px rgba(31, 24, 64, 0.06);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.65);
 
-  --font-body: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-display: "Fredoka", "Nunito", sans-serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Outfit", "Fredoka", sans-serif;
 }
 
-/* ── Role-specific accent colors ── */
+/* ── Role-specific accent colors (Codédex Palette) ── */
 .theme-student {
-  --accent: #6C3CE1;
-  --accent-soft: rgba(108, 60, 225, 0.10);
-  --accent-dark: #4a1faa;
+  --accent: #FFC700;
+  --accent-soft: rgba(255, 199, 0, 0.14);
+  --accent-dark: #cca000;
 }
 .theme-teacher {
-  --accent: #2563EB;
-  --accent-soft: rgba(37, 99, 235, 0.10);
-  --accent-dark: #1d4ed8;
+  --accent: #38BDF8;
+  --accent-soft: rgba(56, 189, 248, 0.14);
+  --accent-dark: #0284c7;
 }
 .theme-admin {
-  --accent: #EC4899;
-  --accent-soft: rgba(236, 72, 153, 0.10);
-  --accent-dark: #be185d;
+  --accent: #C084FC;
+  --accent-soft: rgba(192, 132, 252, 0.14);
+  --accent-dark: #9333ea;
 }
 .theme-superadmin {
-  --accent: #1f1840;
-  --accent-soft: rgba(31, 24, 64, 0.10);
-  --accent-dark: #0e0a22;
+  --accent: #FFC700;
+  --accent-soft: rgba(255, 199, 0, 0.14);
+  --accent-dark: #cca000;
 }
 
 [data-theme="dark"] {
@@ -233,7 +249,9 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, in
   gap: 8px;
   padding: 11px 24px;
   background: var(--accent, var(--primary));
-  color: white;
+  /* Role accents are light (yellow/sky/violet) - dark text keeps ~6-11:1
+     contrast (color theory). Buttons with dark fills override inline. */
+  color: #0B0D17;
   border-radius: 999px;
   font-family: var(--font-display);
   font-weight: 700;
@@ -1082,21 +1100,28 @@ h3 { font-size: 18px; }
   }
 }
 
-/* ── Role Theme Accents (Alloria Style) ── */
+/* ── Role Theme Accents (dark-theme consistent - keep in sync with the
+     Codédex block at the top of the file; these must stay readable on the
+     dark dashboard surfaces) ── */
 .theme-student {
-  --accent: var(--accent-purple);
-  --accent-dark: #6C3CE1;
-  --accent-soft: #efe3fa;
+  --accent: #FFC700;
+  --accent-dark: #CCA000;
+  --accent-soft: rgba(255, 199, 0, 0.14);
 }
 .theme-teacher {
-  --accent: #2b1b7a;
-  --accent-dark: #1f1840;
-  --accent-soft: #e4f0fa;
+  --accent: #38BDF8;
+  --accent-dark: #0284c7;
+  --accent-soft: rgba(56, 189, 248, 0.14);
 }
 .theme-admin {
-  --accent: var(--accent-pink);
-  --accent-dark: #c03478;
-  --accent-soft: #fde5ee;
+  --accent: #C084FC;
+  --accent-dark: #9333ea;
+  --accent-soft: rgba(192, 132, 252, 0.14);
+}
+.theme-superadmin {
+  --accent: #FFC700;
+  --accent-dark: #CCA000;
+  --accent-soft: rgba(255, 199, 0, 0.14);
 }
 
 /* ── Custom Scrollbar (Alloria Style) ── */
@@ -1521,4 +1546,763 @@ h3 { font-size: 18px; }
   grid-template-columns: 240px 1fr;
   gap: 18px;
   align-items: start;
+}
+
+/* ── Codédex Specific Layout & Component Styles ── */
+
+.codedex-landing {
+  background-color: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  font-family: var(--font-body);
+}
+
+.codedex-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background-color: rgba(11, 13, 23, 0.85);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 28px;
+}
+
+.codedex-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.codedex-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.codedex-brand-logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background-color: var(--primary);
+  color: #0b0d17;
+  font-weight: 900;
+  font-size: 20px;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 16px rgba(255, 199, 0, 0.4);
+  font-family: monospace;
+}
+
+.codedex-brand-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.codedex-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.codedex-nav-link {
+  color: var(--ink-soft);
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.codedex-nav-link:hover {
+  color: var(--primary);
+}
+
+.codedex-btn-yellow {
+  background-color: var(--primary);
+  color: #0b0d17;
+  font-weight: 800;
+  font-size: 14px;
+  padding: 10px 24px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 18px rgba(255, 199, 0, 0.35);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.codedex-btn-yellow:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 24px rgba(255, 199, 0, 0.5);
+}
+
+.codedex-btn-secondary {
+  background-color: var(--bg-card);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 10px 24px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.codedex-btn-secondary:hover {
+  background-color: var(--bg-soft);
+  border-color: var(--line-strong);
+}
+
+.codedex-hero-section {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+  background-color: #0b0d17;
+  min-height: calc(100vh - 72px);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.codedex-hero-video-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.codedex-hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.88;
+  filter: brightness(0.9) contrast(1.05);
+}
+
+.codedex-hero-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(11, 13, 23, 0.2) 0%, rgba(11, 13, 23, 0.6) 80%, #0b0d17 100%);
+  pointer-events: none;
+}
+
+.codedex-hero-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 100px 24px;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+.codedex-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background-color: #1c183a;
+  border: 1px solid #3e346a;
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+
+.codedex-hero-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1.1;
+  color: #ffffff;
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+}
+
+.codedex-gradient-text {
+  background: linear-gradient(135deg, #FFC700 0%, #00F2FE 50%, #EC4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.codedex-hero-subtitle {
+  font-size: clamp(16px, 2vw, 20px);
+  color: var(--ink-soft);
+  font-weight: 500;
+  max-width: 680px;
+  margin: 0 auto 32px;
+  line-height: 1.6;
+}
+
+.codedex-hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ── Section Header ── */
+.codedex-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 64px 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.codedex-section-tag {
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.codedex-section-title {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3.5vw, 38px);
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0 0 32px;
+}
+
+/* ── Learning Journeys Cards ── */
+.codedex-journey-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 32px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-lg);
+}
+
+.codedex-journey-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.codedex-journey-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 4px;
+}
+
+.codedex-journey-desc {
+  color: var(--ink-soft);
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.codedex-stats-pills {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.codedex-stat-pill {
+  background-color: var(--bg-soft);
+  border: 1px solid var(--line-strong);
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.codedex-course-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.codedex-course-card {
+  background-color: #0b0d17;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.codedex-course-card:hover {
+  border-color: #384268;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+}
+
+.codedex-course-thumb {
+  height: 140px;
+  position: relative;
+  overflow: hidden;
+}
+
+.codedex-course-body {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.codedex-course-type {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.codedex-course-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 8px;
+  transition: color 0.2s ease;
+}
+
+.codedex-course-card:hover .codedex-course-name {
+  color: var(--primary);
+}
+
+.codedex-course-snippet {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.codedex-tag-beginner {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background-color: #1e293b;
+  color: #cbd5e1;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid #334155;
+}
+
+.codedex-tag-intermediate {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background-color: #1e1b4b;
+  color: #c4b5fd;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid #4c1d95;
+}
+
+.codedex-badge-new {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background-color: #f59e0b;
+  color: #0b0d17;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Filter Controls ── */
+.codedex-catalog-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+
+.codedex-search-box {
+  position: relative;
+  min-width: 280px;
+  flex: 1;
+  max-width: 400px;
+}
+
+.codedex-search-input {
+  width: 100%;
+  padding: 12px 16px 12px 42px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.codedex-search-input:focus {
+  border-color: var(--primary);
+}
+
+.codedex-filter-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.codedex-filter-pill {
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  border: 1px solid var(--line);
+  background-color: var(--bg-card);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.codedex-filter-pill:hover {
+  background-color: var(--bg-soft);
+  color: #ffffff;
+}
+
+.codedex-filter-pill.active {
+  background-color: var(--primary);
+  color: #0b0d17;
+  border-color: var(--primary);
+  box-shadow: 0 0 14px rgba(255, 199, 0, 0.35);
+}
+
+/* ── Club Subscription Banner ── */
+.codedex-club-container {
+  border-radius: 24px;
+  background: linear-gradient(135deg, #14082B 0%, #2A1154 50%, #15092B 100%);
+  border: 1px solid #442385;
+  padding: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+}
+
+.codedex-club-content {
+  max-width: 600px;
+}
+
+.codedex-club-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0 0 12px;
+}
+
+.codedex-club-subtitle {
+  font-size: 16px;
+  color: #d1d5db;
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.codedex-club-perks {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.codedex-club-perk {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.codedex-perk-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background-color: rgba(168, 85, 247, 0.2);
+  color: #c084fc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.codedex-perk-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.codedex-perk-sub {
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+/* ── Footer ── */
+.codedex-footer {
+  border-top: 1px solid var(--line);
+  background-color: #080a12;
+  padding: 64px 24px 32px;
+}
+
+.codedex-footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.codedex-footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 40px;
+  margin-bottom: 48px;
+}
+
+.codedex-footer-col-title {
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+
+.codedex-footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.codedex-footer-link {
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.codedex-footer-link:hover {
+  color: #ffffff;
+}
+
+.codedex-footer-bottom {
+  padding-top: 32px;
+  border-top: 1px solid #1c2138;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--ink-mute);
+}
+
+/* ── Pixelated Retro Typography & Animations (Codédex Style) ── */
+
+.font-pixel {
+  font-family: 'Press Start 2P', 'Silkscreen', monospace !important;
+}
+
+.font-pixel-sans {
+  font-family: 'Pixelify Sans', 'Outfit', sans-serif !important;
+}
+
+.font-display {
+  font-family: 'Outfit', sans-serif !important;
+}
+
+.pixel-art-rendering {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* 8-bit Stepped Pixel Borders */
+.pixel-box {
+  box-shadow: 
+    0 -4px 0 0 #0b0d17,
+    0 4px 0 0 #0b0d17,
+    -4px 0 0 0 #0b0d17,
+    4px 0 0 0 #0b0d17,
+    0 -8px 0 0 #28304c,
+    0 8px 0 0 #28304c,
+    -8px 0 0 0 #28304c,
+    8px 0 0 0 #28304c;
+}
+
+.pixel-box-yellow {
+  box-shadow: 
+    0 -3px 0 0 #0b0d17,
+    0 3px 0 0 #0b0d17,
+    -3px 0 0 0 #0b0d17,
+    3px 0 0 0 #0b0d17,
+    0 -6px 0 0 #FFC700,
+    0 6px 0 0 #FFC700,
+    -6px 0 0 0 #FFC700,
+    6px 0 0 0 #FFC700;
+}
+
+.pixel-btn {
+  font-family: 'Press Start 2P', 'Silkscreen', monospace;
+  font-size: 11px;
+  background-color: var(--primary);
+  color: #0b0d17;
+  padding: 14px 24px;
+  border: 3px solid #0b0d17;
+  box-shadow: 4px 4px 0 0 #000, inset -2px -2px 0 0 #cca000;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-weight: 900;
+  border-radius: 4px;
+}
+
+.pixel-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 0 #000, inset -2px -2px 0 0 #cca000;
+  background-color: #ffd438;
+}
+
+.pixel-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 #000;
+}
+
+.pixel-badge {
+  font-family: 'Press Start 2P', 'Silkscreen', monospace;
+  font-size: 9px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  background: #1c183a;
+  border: 2px solid #FFC700;
+  color: #FFC700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 2px 2px 0 0 #000;
+  letter-spacing: 1px;
+}
+
+/* Animations */
+@keyframes pixelFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pixelGlow {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(255, 199, 0, 0.4)); }
+  50% { filter: drop-shadow(0 0 16px rgba(255, 199, 0, 0.9)); }
+}
+
+@keyframes pixelPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.animate-pixel-float {
+  animation: pixelFloat 3s ease-in-out infinite;
+}
+
+.animate-pixel-glow {
+  animation: pixelGlow 2s infinite ease-in-out;
+}
+
+.animate-pixel-pulse {
+  animation: pixelPulse 1.8s infinite ease-in-out;
+}
+
+/* ── Sign-in Page Video Background & WCAG Compliant Layout ── */
+.login-wrapper {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background-color: #0b0d17;
+  padding: 24px;
+}
+
+.login-video-bg-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.login-video-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+  filter: brightness(0.85) contrast(1.05);
+}
+
+.login-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(11, 13, 23, 0.45) 0%, rgba(11, 13, 23, 0.85) 80%, #0b0d17 100%);
+  pointer-events: none;
 }

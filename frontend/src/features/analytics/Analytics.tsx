@@ -79,7 +79,12 @@ function Analytics() {
           {/* Predictive ML Insights Card */}
           {mlInsights && (
             <div className="card" style={{ padding: 24, background: "linear-gradient(135deg, rgba(124, 58, 237, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%)", border: "1.5px solid var(--line)" }}>
-              <div className="eyebrow" style={{ color: "#7C3AED", fontWeight: 800 }}>🧠 AI/ML Engine Diagnostics</div>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
+                <div className="eyebrow" style={{ color: "#7C3AED", fontWeight: 800 }}>🧠 ML Predictive Analytics</div>
+                <span style={{ fontSize: 9, fontWeight: 800, padding: "2px 10px", borderRadius: 99, background: "rgba(124,58,237,0.12)", color: "#7C3AED", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+                  {mlInsights.engine || "Python Scikit-Learn ML Engine"}
+                </span>
+              </div>
               <h3 style={{ margin: "4px 0 16px" }}>Performance predictions & cognitive disengagement risk</h3>
               
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14, marginBottom: 16 }}>
@@ -94,25 +99,32 @@ function Analytics() {
 
                 <div style={{ padding: 14, background: "var(--bg-soft)", borderRadius: 12, border: "1px solid var(--line)" }}>
                   <div className="muted" style={{ fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.04em" }}>Next Test Success</div>
-                  <div style={{ fontSize: 18, fontWeight: 900, color: "#10B981", marginTop: 6, display: "flex", alignItems: "center", gap: 6 }}>
+                  <div style={{ fontSize: 18, fontWeight: 900, color: (mlInsights.predictedNextScore ?? mlInsights.successProbability) >= 70 ? "#10B981" : (mlInsights.predictedNextScore ?? mlInsights.successProbability) >= 55 ? "#F59E0B" : "#EF4444", marginTop: 6, display: "flex", alignItems: "center", gap: 6 }}>
                     <span>🎯</span>
-                    <span>{mlInsights.successProbability}%</span>
+                    <span>{(mlInsights.predictedNextScore ?? mlInsights.successProbability)}%</span>
                   </div>
                   <div className="muted" style={{ fontSize: 9, fontWeight: 700, marginTop: 4 }}>Predicted score threshold</div>
                 </div>
 
                 <div style={{ padding: 14, background: "var(--bg-soft)", borderRadius: 12, border: "1px solid var(--line)" }}>
                   <div className="muted" style={{ fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.04em" }}>Flow State Status</div>
-                  <div style={{ fontSize: 15, fontWeight: 900, color: "#A855F7", marginTop: 8, display: "flex", alignItems: "center", gap: 4 }}>
+                  <div style={{ fontSize: 14, fontWeight: 900, color: mlInsights.disengagementRisk === "High" ? "#EF4444" : mlInsights.flowState?.includes("Anxiety") ? "#F59E0B" : "#10B981", marginTop: 8, display: "flex", alignItems: "center", gap: 4 }}>
                     <span>🌊</span>
-                    <span>{mlInsights.flowState.split(" ")[0]}</span>
+                    <span>{mlInsights.flowState}</span>
                   </div>
                   <div className="muted" style={{ fontSize: 9, fontWeight: 700, marginTop: 6 }}>Challenge-Skill ratio</div>
                 </div>
               </div>
 
-              <div style={{ padding: "12px 14px", background: "var(--bg-soft)", borderRadius: 10, borderLeft: "4px solid #7C3AED", fontSize: 12, lineHeight: 1.5, fontWeight: 600 }}>
-                <span style={{ color: "#7C3AED" }}>🤖 Companion Advice:</span> {mlInsights.recommendation}
+              <div style={{ padding: "12px 14px", background: "var(--bg-soft)", borderRadius: 10, borderLeft: `4px solid ${mlInsights.disengagementRisk === "High" ? "#EF4444" : "#7C3AED"}`, fontSize: 12, lineHeight: 1.5, fontWeight: 600 }}>
+                <span style={{ color: mlInsights.disengagementRisk === "High" ? "#EF4444" : "#7C3AED", fontWeight: 800 }}>� ML Recommendation:</span> {mlInsights.recommendation}
+              </div>
+
+              {/* AI/ML transparency note */}
+              <div style={{ marginTop: 12, fontSize: 10.5, color: "var(--muted)", fontWeight: 600, lineHeight: 1.5 }}>
+                💡 These numbers are <strong>ML predictions</strong> - computed locally by the machine-learning engine from your real
+                accuracy, consistency, focus, and streak. They are <strong>not</strong> answers from the Study Companion chatbot
+                (🤖 Gemini AI). Ask the chatbot "How am I doing?" for an AI-generated analysis.
               </div>
             </div>
           )}
@@ -224,3 +236,6 @@ function PerfCard({ label, value, sub, color }) {
 }
 
 window.Analytics = Analytics;
+
+export default Analytics;
+

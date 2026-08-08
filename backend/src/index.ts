@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Server Entry Point
+// academia.io - Server Entry Point
 // ============================================================
 // Express server with security middleware, route mounting,
 // and error handling. Runs on port 3001 by default.

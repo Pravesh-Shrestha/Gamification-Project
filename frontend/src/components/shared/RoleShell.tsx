@@ -1,7 +1,7 @@
 import React from "react";
 import { LogOut, Bell, Search, School, Users, GraduationCap, BookOpen, Activity, Shield, Flame, Clock, Award } from "lucide-react";
 
-// academia.io — Shared admin/teacher UI bits
+// academia.io - Shared admin/teacher UI bits
 
 export const RoleShellContext = React.createContext<{
   tabs: any[];
@@ -137,12 +137,12 @@ function RoleShell({ user, onLogout, roleLabel, tint = "var(--ink)", children })
                 >
                   ☰
                 </button>
-                <h2 className="topbar-title">{tabs.find(t => t.id === currentTab)?.label || "Portal"}</h2>
+                <h2 className="topbar-title font-pixel-sans">{tabs.find(t => t.id === currentTab)?.label || "Portal"}</h2>
               </div>
               <div className="topbar-right">
                 <div className="topbar-search">
                   <Search size={14} style={{ color: "var(--ink-mute)", flexShrink: 0 }} />
-                  <input type="text" placeholder="Search dashboard…" />
+                  <input type="text" placeholder="Search dashboard…" style={{ background: "transparent", color: "#FFF" }} />
                 </div>
                 {(window as any).NotificationsBell ? (
                   React.createElement((window as any).NotificationsBell, { user, onChange: () => setNotifTick(t => t + 1) })
@@ -151,7 +151,7 @@ function RoleShell({ user, onLogout, roleLabel, tint = "var(--ink)", children })
                     <Bell size={16} />
                   </button>
                 )}
-                <span className="topbar-role-badge">{roleLabel}</span>
+                <span className="topbar-role-badge pixel-badge" style={{ fontSize: 10 }}>{roleLabel}</span>
               </div>
             </div>
             <div className="page">

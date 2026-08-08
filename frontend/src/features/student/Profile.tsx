@@ -1,6 +1,6 @@
 import React from "react";
 
-// academia.io — Profile (badges, stats, streak heatmap, settings)
+// academia.io - Profile (badges, stats, streak heatmap, settings)
 
 function Profile({ profile, onReset, onUpdate }) {
   const earned = new Set(profile.badges || []);
@@ -23,7 +23,7 @@ function Profile({ profile, onReset, onUpdate }) {
             width: 96,
             height: 96,
             borderRadius: "50%",
-            background: "linear-gradient(135deg, #FEF3C7, #FCE7F3)",
+            background: "linear-gradient(135deg, #433d78, #242048)",
             display: "grid",
             placeItems: "center",
             fontSize: 54,
@@ -38,9 +38,9 @@ function Profile({ profile, onReset, onUpdate }) {
             {profile.grade} · Level {lvl.lvl} · {profile.xp.toLocaleString()} XP
           </div>
           <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-            <span style={{ background: "#FEF3C7", color: "#92400E", padding: "4px 12px", borderRadius: 99, fontSize: 12, fontWeight: 800 }}>🔥 {profile.streak} day streak</span>
-            <span style={{ background: "#DBEAFE", color: "#1E40AF", padding: "4px 12px", borderRadius: 99, fontSize: 12, fontWeight: 800 }}>📖 {completed}/{total} lessons</span>
-            <span style={{ background: "#D1FAE5", color: "#065F46", padding: "4px 12px", borderRadius: 99, fontSize: 12, fontWeight: 800 }}>🌳 {profile.treesGrown || 0} trees</span>
+            <span style={{ background: "rgba(245,158,11,0.16)", color: "#FBBF24", border: "1px solid rgba(245,158,11,0.4)", padding: "4px 12px", borderRadius: 99, fontSize: 12, fontWeight: 800 }}>🔥 {profile.streak} day streak</span>
+            <span style={{ background: "rgba(59,130,246,0.16)", color: "#93C5FD", border: "1px solid rgba(59,130,246,0.4)", padding: "4px 12px", borderRadius: 99, fontSize: 12, fontWeight: 800 }}>📖 {completed}/{total} lessons</span>
+            <span style={{ background: "rgba(16,185,129,0.16)", color: "#6EE7B7", border: "1px solid rgba(16,185,129,0.4)", padding: "4px 12px", borderRadius: 99, fontSize: 12, fontWeight: 800 }}>🌳 {profile.treesGrown || 0} trees</span>
           </div>
         </div>
         <div>

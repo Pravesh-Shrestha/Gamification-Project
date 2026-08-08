@@ -1,0 +1,57 @@
+name: Release Workflow
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and Create Release
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/test?sslmode=disable"
+      DIRECT_URL: "postgresql://postgres:postgres@localhost:5432/test?sslmode=disable"
+      JWT_SECRET: "release-secret-key-for-packaging"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Dependencies
+        run: |
+          npm install --legacy-peer-deps
+          npm --prefix backend install --legacy-peer-deps
+          npm --prefix frontend install --legacy-peer-deps
+
+      - name: Generate Prisma Client
+        run: |
+          npm --prefix backend run db:generate
+
+      - name: Build Backend & Frontend
+        run: |
+          npm --prefix backend run build
+          npm --prefix frontend run build
+
+      - name: Package Release Assets
+        run: |
+          mkdir -p release-assets
+          tar -czf release-assets/frontend-build.tar.gz -C frontend/dist .
+          tar -czf release-assets/backend-build.tar.gz -C backend dist package.json prisma
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release-assets/frontend-build.tar.gz
+            release-assets/backend-build.tar.gz
+          generate_release_notes: true

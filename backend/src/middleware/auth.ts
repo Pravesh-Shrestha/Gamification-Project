@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Auth Middleware
+// academia.io - Auth Middleware
 // ============================================================
 // Verifies JWT from Authorization header.
 // Attaches user payload to request for downstream handlers.

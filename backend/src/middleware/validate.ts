@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Zod Validation Middleware
+// academia.io - Zod Validation Middleware
 // ============================================================
 // Validates request body against a Zod schema before
 // passing control to the route handler.

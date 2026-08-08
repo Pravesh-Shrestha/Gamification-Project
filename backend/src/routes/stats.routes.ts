@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Stats & Performance Routes
+// academia.io - Stats & Performance Routes
 // ============================================================
 
 import { Router, Response } from "express";

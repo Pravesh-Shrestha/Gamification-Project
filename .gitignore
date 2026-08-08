@@ -100,4 +100,5 @@ docker-compose.override.yml
 # Windows thumbnails
 ehthumbs.db
 Desktop.ini
+frontend/assets/banner.mp4
 banner.mp4

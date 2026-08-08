@@ -1,6 +1,6 @@
 import React from "react";
 
-// academia.io — Dashboard (Home)
+// academia.io - Dashboard (Home)
 
 function Dashboard({ profile, onNav, onOpenLesson }) {
   const dp = window.Engine.dailyProgress(profile, profile.dailyGoal);
@@ -10,7 +10,7 @@ function Dashboard({ profile, onNav, onOpenLesson }) {
   const all = window.allLessons();
   const progressPct = Math.round((done.size / all.length) * 100);
 
-  // Recently started subject (any subject with at least 1 completed lesson — or first)
+  // Recently started subject (any subject with at least 1 completed lesson - or first)
   const subjectsWithProgress = window.CURRICULUM.map((s) => {
     const subjLessons = s.chapters.flatMap((c) => c.lessons);
     const completed = subjLessons.filter((l) => done.has(l.id)).length;
@@ -44,7 +44,7 @@ function Dashboard({ profile, onNav, onOpenLesson }) {
                 {profile.name},<br />ready to learn?
               </h1>
               <p style={{ color: "rgba(250,247,242,0.7)", margin: "0 0 22px", maxWidth: 380, fontWeight: 600 }}>
-                You've earned <b style={{ color: "#FAF7F2" }}>{dp.earned} XP</b> today. {dp.pct >= 100 ? "Goal complete — nicely done." : `${dp.goal - dp.earned} XP to hit your daily goal.`}
+                You've earned <b style={{ color: "#FAF7F2" }}>{dp.earned} XP</b> today. {dp.pct >= 100 ? "Goal complete - nicely done." : `${dp.goal - dp.earned} XP to hit your daily goal.`}
               </p>
 
               {recommended ? (

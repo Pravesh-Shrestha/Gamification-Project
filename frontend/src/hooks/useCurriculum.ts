@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — useCurriculum Hook
+// academia.io - useCurriculum Hook
 // ============================================================
 // Fetches the full curriculum tree with per-lesson progress,
 // and provides helpers for loading individual lessons.

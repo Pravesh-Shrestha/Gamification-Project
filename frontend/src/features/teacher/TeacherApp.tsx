@@ -1,7 +1,7 @@
 import React from "react";
 import { getClassClusters } from "../../services/teacher";
 
-// academia.io — Teacher dashboard
+// academia.io - Teacher dashboard
 
 function TeacherApp({ user, onLogout }) {
   const [db, setDb] = React.useState(() => window.DB.load());

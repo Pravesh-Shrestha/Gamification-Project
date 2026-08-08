@@ -110,7 +110,7 @@ async function explainFromSlides(topic: string): Promise<string | null> {
     return [
       `📚 **${best.title}** (${subject} · ${chapterTitle})`,
       "",
-      keyPoints.length > 0 ? keyPoints.map(p => `• ${p}`).join("\n") : `I found a lesson about "${topic}" — go to the **Learn** section and open "${best.title}" to see the full explanation!`,
+      keyPoints.length > 0 ? keyPoints.map(p => `• ${p}`).join("\n") : `I found a lesson about "${topic}" - go to the **Learn** section and open "${best.title}" to see the full explanation!`,
       "",
       `⏱ ${best.mins} min · Ready when you are!`,
     ].join("\n");
@@ -232,7 +232,7 @@ const patterns: Pattern[] = [
     response: (user) => {
       const hour = new Date().getHours();
       const timeGreeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
-      return `${timeGreeting}, ${user.name}! 👋 I'm your study companion. Ask me about:\n• 📚 **Lessons & concepts** — "Explain fractions"\n• ⭐ **Your stats** — "How am I doing?"\n• 🏆 **Leaderboard** — "What's my rank?"\n• 💡 **Study tips** — "Help me focus"\n• 🎯 **Recommendations** — "What should I study?"`;
+      return `${timeGreeting}, ${user.name}! 👋 I'm your study companion. Ask me about:\n• 📚 **Lessons & concepts** - "Explain fractions"\n• ⭐ **Your stats** - "How am I doing?"\n• 🏆 **Leaderboard** - "What's my rank?"\n• 💡 **Study tips** - "Help me focus"\n• 🎯 **Recommendations** - "What should I study?"`;
     },
   },
 
@@ -245,7 +245,7 @@ const patterns: Pattern[] = [
   // ── Name / who are you ────────────────────────────────
   {
     triggers: [/who are you|what (are|is) you|your name/i],
-    response: () => "I'm **Academia Companion** — your study partner! 📚 I'm here to help you understand lessons, track your progress, earn XP, and stay motivated. Ask me anything about your studies!",
+    response: () => "I'm **Academia Companion** - your study partner! 📚 I'm here to help you understand lessons, track your progress, earn XP, and stay motivated. Ask me anything about your studies!",
   },
 
   // ── XP & Earning Points ───────────────────────────────
@@ -258,7 +258,7 @@ const patterns: Pattern[] = [
       const todayActivity = await getTodayActivity(user);
 
       return [
-        `⭐ **${user.xp} XP** — Level ${level}`,
+        `⭐ **${user.xp} XP** - Level ${level}`,
         `📊 **${remaining} XP** to Level ${level + 1}`,
         `📅 **Today:** ${todayActivity.lessonsToday} lessons, ${todayActivity.xpToday} XP earned`,
         "",
@@ -306,7 +306,7 @@ const patterns: Pattern[] = [
           "🏅 **You haven't earned any badges yet!**",
           "",
           "Here are badges you can unlock:",
-          ...badges.map(b => `  ${b.icon} **${b.name}** — ${b.desc}`),
+          ...badges.map(b => `  ${b.icon} **${b.name}** - ${b.desc}`),
           "",
           "💡 *Complete lessons and build streaks to earn them!*",
         ].join("\n");
@@ -315,10 +315,10 @@ const patterns: Pattern[] = [
       return [
         `🏅 **${earned.length} badge${earned.length > 1 ? "s" : ""}** earned!`,
         "",
-        ...earned.map(b => `  ✅ ${b.icon} **${b.name}** — ${b.desc}`),
+        ...earned.map(b => `  ✅ ${b.icon} **${b.name}** - ${b.desc}`),
         "",
         "**Still available:**",
-        ...badges.filter(b => !b.earned).map(b => `  ${b.icon} **${b.name}** — ${b.desc}`),
+        ...badges.filter(b => !b.earned).map(b => `  ${b.icon} **${b.name}** - ${b.desc}`),
         "",
         "Keep learning to collect them all! 🎯",
       ].join("\n");
@@ -358,7 +358,7 @@ const patterns: Pattern[] = [
         rank === 1 ? "🎉 **You're #1!** Amazing work!" : rank <= 3
           ? `🥉 You're in the **top 3**! Keep pushing!`
           : rank <= total * 0.25
-            ? `👏 **Top 25%** — great job!`
+            ? `👏 **Top 25%** - great job!`
             : `📈 You can climb higher! Complete lessons to earn XP.`,
         "",
         `🥇 Class leader: **${topStudent.name}** (${topStudent.xp.toLocaleString()} XP)`,
@@ -436,7 +436,7 @@ const patterns: Pattern[] = [
         "",
         "**Recent:**",
         ...todayLessons.slice(0, 5).map(l =>
-          `  ✅ **${l.lesson.title}** — ${l.score}/${l.total} ${l.perfect ? "💎" : ""}`
+          `  ✅ **${l.lesson.title}** - ${l.score}/${l.total} ${l.perfect ? "💎" : ""}`
         ),
         "",
         "Great work! Keep it up! 🔥",
@@ -460,7 +460,7 @@ const patterns: Pattern[] = [
         "",
         weeklyStats.length > 0
           ? ["**Completed lessons:**", ...weeklyStats.slice(0, 8).map(l =>
-              `  ${l.perfect ? "💎" : "✅"} **${l.lesson.title}** — ${l.score}/${l.total}`
+              `  ${l.perfect ? "💎" : "✅"} **${l.lesson.title}** - ${l.score}/${l.total}`
             )].join("\n")
           : "No lessons completed this week yet. Start one today! 📚",
         "",
@@ -540,7 +540,7 @@ const patterns: Pattern[] = [
         "",
         "**Next lessons to try:**",
         ...recs.map((l, i) =>
-          `  ${i + 1}. 📖 **${l.title}** (${l.chapter.subject.name} · ${l.chapter.title}) — ${l.mins} min`
+          `  ${i + 1}. 📖 **${l.title}** (${l.chapter.subject.name} · ${l.chapter.title}) - ${l.mins} min`
         ),
         "",
         "💡 *Start with the first one to build momentum!*",
@@ -569,7 +569,7 @@ const patterns: Pattern[] = [
       return [
         `📚 **Lessons about "${topic}"**`,
         "",
-        ...lessons.map(l => `• **${l.title}** (${(l as any).chapter?.subject?.name || ""}) — ${l.mins} min`),
+        ...lessons.map(l => `• **${l.title}** (${(l as any).chapter?.subject?.name || ""}) - ${l.mins} min`),
         "",
         "Go to **Learn** to start one! Want me to explain a specific concept?",
       ].join("\n");
@@ -613,7 +613,7 @@ const patterns: Pattern[] = [
     triggers: [/motivat|encourage|inspire|tired|bored|demotivat|cheer|lazy/i],
     response: (user) => {
       const quotes = [
-        `🌟 **${user.name}**, you've already earned **${user.xp.toLocaleString()} XP**! Think how far you've come — keep going! 🚀`,
+        `🌟 **${user.name}**, you've already earned **${user.xp.toLocaleString()} XP**! Think how far you've come - keep going! 🚀`,
         `💪 **You can do this!** Every expert was once a beginner. One lesson at a time!`,
         `📚 **Small steps = big results.** Just 15 minutes of learning today builds tomorrow's success!`,
         `🔥 Your **${user.streak > 0 ? `${user.streak}-day streak` : "learning journey"}** proves you have what it takes!`,
@@ -633,7 +633,7 @@ const patterns: Pattern[] = [
         "🎯 **Focus Mode** helps you concentrate!",
         "",
         "• ⏱ **25-minute** focus session with tree growing 🌱",
-        "• 🌳 Watch your tree grow — leave = it withers",
+        "• 🌳 Watch your tree grow - leave = it withers",
         "• ⭐ Earn **2 XP per minute** of focus",
         "• 🏅 Unlock **Focused Mind** badge at 25 min",
         `• 🌲 You've grown **${user.treesGrown} trees** so far!`,
@@ -691,7 +691,7 @@ const patterns: Pattern[] = [
           `📚 **Search results for "${topic}"**`,
           "",
           ...curriculum.map(l =>
-            `• **${l.title}** — ${(l as any).chapter?.subject?.name || ""} · ${(l as any).chapter?.title || ""} (${l.mins} min)`
+            `• **${l.title}** - ${(l as any).chapter?.subject?.name || ""} · ${(l as any).chapter?.title || ""} (${l.mins} min)`
           ),
           "",
           "Open these in the **Learn** section for full explanations with slides!",
@@ -702,15 +702,15 @@ const patterns: Pattern[] = [
         `I couldn't find a specific lesson about "${topic}". 🤔`,
         "",
         "Try one of these topics:",
-        "• 🔢 **Fractions** — numerators, denominators, equivalents",
-        "• 🔣 **Algebra** — variables, equations, expressions",
-        "• 🌿 **Plants** — photosynthesis, cells, growth",
-        "• ⚡ **Forces** — gravity, friction, motion",
-        "• 📝 **Grammar** — tenses, punctuation, sentence structure",
-        "• 📖 **Vocabulary** — word meanings, antonyms, synonyms",
-        "• 💻 **Computer Basics** — hardware, software, internet",
-        "• 🌍 **Geography** — continents, maps, climate",
-        "• 🏛️ **History** — ancient civilizations, timelines",
+        "• 🔢 **Fractions** - numerators, denominators, equivalents",
+        "• 🔣 **Algebra** - variables, equations, expressions",
+        "• 🌿 **Plants** - photosynthesis, cells, growth",
+        "• ⚡ **Forces** - gravity, friction, motion",
+        "• 📝 **Grammar** - tenses, punctuation, sentence structure",
+        "• 📖 **Vocabulary** - word meanings, antonyms, synonyms",
+        "• 💻 **Computer Basics** - hardware, software, internet",
+        "• 🌍 **Geography** - continents, maps, climate",
+        "• 🏛️ **History** - ancient civilizations, timelines",
       ].join("\n");
     },
   },
@@ -721,11 +721,11 @@ const patterns: Pattern[] = [
     response: () => [
       "📚 **Study Tips for Better Learning**",
       "",
-      "1️⃣ **Spaced repetition** — Review topics at increasing intervals",
-      "2️⃣ **Active recall** — Test yourself instead of re-reading",
-      "3️⃣ **Pomodoro technique** — 25 min focus, 5 min break",
-      "4️⃣ **Teach someone** — Explaining a concept helps you master it",
-      "5️⃣ **Stay consistent** — 15 min daily beats 3 hours weekly",
+      "1️⃣ **Spaced repetition** - Review topics at increasing intervals",
+      "2️⃣ **Active recall** - Test yourself instead of re-reading",
+      "3️⃣ **Pomodoro technique** - 25 min focus, 5 min break",
+      "4️⃣ **Teach someone** - Explaining a concept helps you master it",
+      "5️⃣ **Stay consistent** - 15 min daily beats 3 hours weekly",
       "",
       "🎯 *Try the Focus mode to practice Pomodoro!*",
     ].join("\n"),
@@ -751,7 +751,7 @@ const patterns: Pattern[] = [
         "📚 **Available Curriculum**",
         "",
         ...subjects.map(s =>
-          `  ${s.icon} **${s.name}** — ${s.chapters.length} chapters, ${s.chapters.reduce((a, c) => a + c.lessons.length, 0)} lessons\n  ${s.blurb || ""}`
+          `  ${s.icon} **${s.name}** - ${s.chapters.length} chapters, ${s.chapters.reduce((a, c) => a + c.lessons.length, 0)} lessons\n  ${s.blurb || ""}`
         ),
         "",
         "Go to the **Learn** tab to explore!",
@@ -768,7 +768,7 @@ const patterns: Pattern[] = [
       "• Unlock new cosmetics as you **level up**!",
       "• Each level grants a **new item** for your avatar",
       "• Visit the **Locker** tab to equip your favorites",
-      "• Collect them all — there are **12 unique items**!",
+      "• Collect them all - there are **12 unique items**!",
       "",
       "💡 *Level up by completing lessons to unlock more cosmetics!*",
     ].join("\n"),
@@ -827,7 +827,7 @@ const patterns: Pattern[] = [
         "",
         recent.length > 0
           ? ["**Recently completed:**", ...recent.map(l =>
-              `  ✅ **${l.lesson.title}** — ${l.score}/${l.total} ${l.perfect ? "💎" : ""}`
+              `  ✅ **${l.lesson.title}** - ${l.score}/${l.total} ${l.perfect ? "💎" : ""}`
             )].join("\n")
           : "No assignments completed yet.",
         "",
@@ -883,7 +883,7 @@ async function smartFallback(user: any, message: string): Promise<string> {
         `📚 **I found these lessons related to your question:**`,
         "",
         ...results.map(l =>
-          `• **${l.title}** — ${(l as any).chapter?.subject?.name || ""} (${l.mins} min)`
+          `• **${l.title}** - ${(l as any).chapter?.subject?.name || ""} (${l.mins} min)`
         ),
         "",
         `💡 *Try asking me to "explain ${words[0]}" for a detailed answer!*`,
@@ -893,12 +893,12 @@ async function smartFallback(user: any, message: string): Promise<string> {
 
   // Generic helpful response with suggestions
   const suggestions = [
-    "📊 **My stats** — 'How am I doing?'",
-    "📚 **Explain concepts** — 'What is photosynthesis?'",
-    "🏆 **Leaderboard** — 'What's my rank?'",
-    "🎯 **Recommendations** — 'What should I study?'",
-    "📅 **Today's activity** — 'What did I do today?'",
-    "💪 **Motivation** — 'Motivate me!'",
+    "📊 **My stats** - 'How am I doing?'",
+    "📚 **Explain concepts** - 'What is photosynthesis?'",
+    "🏆 **Leaderboard** - 'What's my rank?'",
+    "🎯 **Recommendations** - 'What should I study?'",
+    "📅 **Today's activity** - 'What did I do today?'",
+    "💪 **Motivation** - 'Motivate me!'",
   ];
 
   return [
@@ -1028,29 +1028,30 @@ Guidelines:
     parts: [{ text: message }]
   });
 
-  const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-flash",
-  });
-
-  const chatResult = await model.generateContent({
-    contents,
-    generationConfig: {
-      temperature: 0.7,
-    }
-  });
-
-  // Inject system prompt context directly or simulate it via system instruction
-  // gemini-1.5-flash supports systemInstruction:
+  // Inject system prompt context directly via systemInstruction
   const modelWithSystem = genAI.getGenerativeModel({
-    model: "gemini-1.5-flash",
+    model: "gemini-2.0-flash",
     systemInstruction: systemPrompt,
   });
 
-  const chatResultWithSystem = await modelWithSystem.generateContent({
-    contents,
-  });
+  // One generation per message (avoids doubling quota use) with a short
+  // retry on 429 rate-limits, which the free tier can hit per-minute.
+  const attempt = () =>
+    modelWithSystem.generateContent({ contents, generationConfig: { temperature: 0.7 } });
 
-  return chatResultWithSystem.response.text();
+  let chatResult;
+  try {
+    chatResult = await attempt();
+  } catch (err: any) {
+    if (String(err?.message || err).includes("429")) {
+      await new Promise((r) => setTimeout(r, 3000));
+      chatResult = await attempt();
+    } else {
+      throw err;
+    }
+  }
+
+  return chatResult.response.text();
 }
 
 // ============================================================
@@ -1107,13 +1108,24 @@ export async function processMessage(userId: string, message: string) {
   // Filter out the last message (which is the one we just saved)
   const pastHistory = orderedHistory.filter(h => h.content !== message);
 
+  // Track which engine produced the reply for AI-transparency UI.
+  // "ai"      => Generative AI (Google Gemini)
+  // "rule"    => Local rule-based / ML diagnostic companion engine
   let reply: string | null = null;
+  let source: "ai" | "rule" = "rule";
+  let notice: string | null = null;
 
   if (genAI) {
     try {
       reply = await generateGeminiRagResponse(user, message, pastHistory);
-    } catch (e) {
+      source = "ai";
+    } catch (e: any) {
       console.error("🧠 [AI CHATBOT] Gemini RAG failed, falling back to rule-based engine:", e);
+      // Distinguish a quota/rate-limit failure (429) so the UI can explain
+      // why the AI isn't answering, rather than looking like a bug.
+      if (String(e?.message || e).includes("429")) {
+        notice = "⚠️ AI is temporarily unavailable (usage limit reached). Showing the local engine's answer instead.";
+      }
     }
   }
 
@@ -1131,7 +1143,7 @@ export async function processMessage(userId: string, message: string) {
     }
   }
 
-  // Smart fallback — search curriculum, explain concepts, or suggest
+  // Smart fallback - search curriculum, explain concepts, or suggest
   if (!reply) {
     reply = await smartFallback(user, message);
   }
@@ -1150,9 +1162,15 @@ export async function processMessage(userId: string, message: string) {
 
   return {
     reply,
-    history: updatedHistory.reverse().map(h => ({
+    source,
+    notice,
+    history: updatedHistory.reverse().map((h, i) => ({
       role: h.role,
       content: h.content,
+      // Only the newest message carries the engine badge / notice (older
+      // messages were persisted before source tracking was added).
+      source: h.role === "assistant" && i === updatedHistory.length - 1 ? source : undefined,
+      notice: h.role === "assistant" && i === updatedHistory.length - 1 ? notice : undefined,
     })),
   };
 }

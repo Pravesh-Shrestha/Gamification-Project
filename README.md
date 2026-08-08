@@ -1,85 +1,71 @@
-# Academia.io: A Gamified Digital Learning Platform with Adaptive AI Assistance and Analytics
+# Academia.io: A Gamified Digital Learning Platform
 
-Academia.io is a multi-tenant digital learning application designed as a thesis research project. The platform integrates structural gamification (experience points, streaks, badges, quests, and cosmetic customization) with a focused student learning experience, a teacher monitoring classroom dashboard, and administrative analytic panels displaying system-wide data patterns. 
+## Project Overview
 
-The application utilizes a monorepo structure containing a decoupled TypeScript Express backend server using Prisma ORM and a Vite-based React client styled with modern Tailwind CSS.
+Academia.io is a multi-tenant digital learning application developed as a thesis research project. The primary purpose of this platform is to investigate the effects of structural gamification on student engagement and academic performance. The system integrates game mechanics, such as experience points, streaks, badges, quests, and cosmetic customization, directly into a formal learning environment. Additionally, it provides teachers with a monitoring dashboard and administrators with analytics panels to observe system wide data trends.
 
----
+The application is built on a monorepo structure, utilizing a decoupled TypeScript Express backend, a Vite React client, and a Python based analytics engine designed to process and model learning patterns.
 
-## Key Core Features
+## Research Objectives
 
-### 1. Multi-Tenant Academic Structure
-*   **Schools & Classes**: Distinct tenant database boundaries for multiple schools, each containing dynamic grade classes (Grade 1 to 10).
-*   **Role-Based Dashboards**: Tailored work environments for **Students**, **Teachers**, **Admins**, and **Super-Admins**.
+1.  **Gamification Efficacy**: To evaluate how structural game elements influence user retention and session length.
+2.  **Predictive Analytics**: To utilize student interaction logs to predict academic outcomes and identify disengagement early.
+3.  **Adaptive Learning**: To measure the effectiveness of context aware tutoring interventions on quiz completion rates.
 
-### 2. Gamified Student Workspace
-*   **Learn Hub**: Interactive modules grouped by subject chapters (Math, Science, English) with lesson timelines.
-*   **Lesson Player**: In-lesson slides followed by adaptive multiple-choice quizzes that reward Experience Points (XP).
-*   **Focus Mode**: A built-in distraction-free Pomodoro study timer with configurable soundscapes.
-*   **Achievements & Shop**: A user profile showcasing earned badges, current login streaks, and a shop to unlock cosmetic avatar frames using earned XP.
+## Core Modules
 
-### 3. Teacher Control & Analytics Workspace
-*   **Class Metrics**: Detailed reports tracking completion rates, average quiz scores, active streaks, and overall class participation.
-*   **Content Management**: Interface for teachers to upload and link custom reading materials (PDFs, images) to specific modules.
+### 1. Gamified Learning Environment (Student Interface)
+*   **Structured Curriculum**: Interactive modules categorized by subject chapters, featuring sequential lesson timelines.
+*   **Assessment and Reward System**: Lesson slides followed by multiple choice quizzes that distribute Experience Points (XP) based on accuracy.
+*   **Focus Management**: A study timer with customizable soundscapes to measure dedicated study intervals.
+*   **Progression Tracking**: A user profile displaying earned badges, login streaks, and a virtual storefront to unlock cosmetic avatar frames using earned currency.
 
-### 4. Adaptive AI Tutor & ML Log Logger
-*   **Google Gemini Chatbot**: An on-demand tutoring assistant context-aware of the student's learning state.
-*   **Interaction Logging**: High-fidelity session trackers logging user quiz attempts, lesson page views, focus minutes, and login frequencies, preparing clean dataset outputs for offline Machine Learning (ML) research.
+### 2. Pedagogical Control Center (Teacher Interface)
+*   **Performance Metrics**: Automated reports tracking completion rates, average assessment scores, active streaks, and overall class participation.
+*   **Resource Management**: An interface permitting educators to upload and associate supplemental reading materials with specific learning modules.
 
-### 5. Research Analytics Dashboard (Admin View)
-*   **Impact Panels**: Data visualizations tracking the relationship between user engagement (XP, streaks) and quiz outcomes.
-*   **Intervention Cockpit**: Tools to inspect classroom distributions, score frequencies, and configure custom notification alerts for students requiring learning support.
+### 3. Data Analytics and Machine Learning Engine
+*   **Event Logging**: High resolution session trackers that log user quiz attempts, lesson page views, focus minutes, and login frequencies for offline research analysis.
+*   **Impact Visualization**: Data panels tracking the statistical relationship between user engagement metrics and quiz outcomes.
+*   **Intervention Tools**: Interfaces to inspect classroom distributions, score frequencies, and configure custom notification alerts for students requiring learning support.
+*   **Predictive Services**: Background processes that analyze student interaction data to estimate engagement levels and model potential learning outcomes.
 
----
+## System Architecture
 
-## Technology Stack
-
-### Backend API
-*   **Runtime**: Node.js
+### Backend API Layer
+*   **Runtime Environment**: Node.js
 *   **Language**: TypeScript
 *   **Framework**: Express.js
-*   **Database ORM**: Prisma ORM (supports PostgreSQL / SQLite)
-*   **Auth**: JSON Web Tokens (JWT) & Bcryptjs password hashing
-*   **AI Integration**: Google Generative AI (@google/generative-ai)
+*   **Database Management**: Prisma ORM (supports PostgreSQL / SQLite)
+*   **Authentication**: JSON Web Tokens (JWT) and Bcryptjs
+*   **Generative AI Integration**: Google Generative AI for contextual tutoring
 
-### Frontend Client
-*   **Tooling**: Vite
-*   **Library**: React 18 & TypeScript
-*   **Styling**: Tailwind CSS & CSS custom variables
+### Machine Learning Layer
+*   **Environment**: Python 3
+*   **Function**: Processes student event logs and generates predictive models for engagement and performance.
+
+### Frontend Client Layer
+*   **Build Tool**: Vite
+*   **Library**: React 18 and TypeScript
+*   **Styling**: Tailwind CSS and custom variables
 *   **Icons**: Lucide React
 *   **Animations**: Framer Motion
-
----
 
 ## Project Structure
 
 ```text
 Gamification-Project/
 ├── backend/                  # Express Gateway API
-│   ├── prisma/               # Prisma Schema & local SQLite DB (dev.db)
-│   ├── src/
-│   │   ├── config/           # App settings and environment checking
-│   │   ├── controllers/      # Route controllers handling business actions
-│   │   ├── middleware/       # JWT verification & payload schemas
-│   │   ├── routes/           # REST API endpoint definitions
-│   │   ├── services/         # Database queries (Auth, AI, Analytics)
-│   │   ├── types/            # TypeScript helper interfaces
-│   │   └── index.ts          # Main Express gateway startup
+│   ├── ml_engine/            # Python scripts for data analysis and ML models
+│   ├── prisma/               # Prisma Schema and local database
+│   ├── src/                  # API source code (controllers, routes, services)
 │   ├── package.json
 │   └── tsconfig.json
 │
 ├── frontend/                 # Vite SPA Client
 │   ├── assets/               # Brand logos and static images
 │   ├── css/                  # Styling files and design tokens
-│   ├── src/
-│   │   ├── components/       # Shared UI buttons, dialogs, and panels
-│   │   ├── context/          # Global User Authentication provider
-│   │   ├── features/         # Features split into admin, auth, student, teacher
-│   │   ├── hooks/            # Custom React hooks (useDashboard, useChatbot)
-│   │   ├── logic/            # Math math engines and game loop scoring calculations
-│   │   ├── services/         # API fetching handlers
-│   │   ├── App.tsx           # Role-based router configuration
-│   │   └── main.tsx          # React application entry point
+│   ├── src/                  # React application code (components, features, hooks)
 │   ├── package.json
 │   └── vite.config.ts
 │
@@ -87,15 +73,14 @@ Gamification-Project/
 └── README.md                 # Project documentation
 ```
 
----
-
-## Installation & Setup
+## Installation and Setup
 
 ### Prerequisites
 *   Node.js (version 18 or above recommended)
+*   Python (version 3.8 or above recommended for the ML engine)
 *   npm or pnpm package manager
 
-### 1. Clone the Project
+### 1. Clone the Repository
 Navigate into your local directory containing the codebase:
 ```bash
 cd Gamification-Project
@@ -124,8 +109,16 @@ cd ../frontend && npm install
 cd ..
 ```
 
-### 4. Initialize the Database
-Configure Prisma client mapping and seed initial academic content (subjects, chapters, lessons, questions, and master badges):
+### 4. Setup Python ML Engine (Optional)
+To run the analytics engine locally, install the required Python dependencies:
+```bash
+cd backend/ml_engine
+pip install -r requirements.txt
+cd ../..
+```
+
+### 5. Initialize the Database
+Configure the Prisma client mapping and seed the initial academic content:
 ```bash
 cd backend
 npx prisma generate
@@ -134,7 +127,7 @@ npm run db:seed
 cd ..
 ```
 
-### 5. Running the Application Locally
+### 6. Run the Application Locally
 You can run both the Express backend and Vite frontend concurrently using the root package runner:
 ```bash
 # From the root folder:
@@ -142,9 +135,7 @@ npm run dev
 ```
 
 *   **Backend Server**: Available at `http://localhost:5000`
-*   **Frontend Client**: Available at `http://localhost:5173` (or `http://localhost:3000` based on terminal output)
-
----
+*   **Frontend Client**: Available at `http://localhost:5173`
 
 ## Credentials for Development Testing
 After running `npm run db:seed` in the backend, you can log in with the following default accounts to inspect different roles:
@@ -155,3 +146,10 @@ After running `npm run db:seed` in the backend, you can log in with the followin
 | **School Admin** | `admin@school1.edu` | `admin123` |
 | **Teacher** | `teacher@school1.edu` | `teacher123` |
 | **Student** | `student@school1.edu` | `student123` |
+
+## Assets Note
+
+The background video (`banner.mp4`) used in the landing page and login screen is not included in this repository due to file size limits. Please download it from this Google Drive link:
+https://drive.google.com/file/d/1Og9sk1Ox-DlT49RVYbIJAdnrx6Glfcjj/view?usp=sharing
+
+Once downloaded, place the file in the `frontend/assets/` directory as `banner.mp4`.

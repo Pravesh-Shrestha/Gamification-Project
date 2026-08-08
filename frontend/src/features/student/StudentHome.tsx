@@ -1,6 +1,6 @@
 import React from "react";
 
-// academia.io — Student sub-screens: Home, Quests, Locker, Lootbox
+// academia.io - Student sub-screens: Home, Quests, Locker, Lootbox
 
 function StudentHome({ user, db, assignments, classes, onOpenLesson, onTab }) {
   const dp = window.Engine.dailyProgress(user, user.dailyGoal);
@@ -22,7 +22,7 @@ function StudentHome({ user, db, assignments, classes, onOpenLesson, onTab }) {
         <BigStat label="Daily Goal" value={`${dp.pct}%`} color="#F59E0B" sub={dp.goal - dp.earned <= 0 ? "Goal completed!" : `${dp.goal - dp.earned} XP remaining`} />
         <BigStat label="Level" value={lvl.lvl} color="#A855F7" sub={`${lvl.into}/${lvl.span} XP`} />
         <BigStat label="Streak" value={`${user.streak} days`} color="#EF4444" sub={`Freezes: ${user.freezes?.count || 0}`} />
-        <BigStat label="Class Rank" value={myRank ? `#${myRank}` : "—"} color="#3B82F6" sub={myClass?.name || "No class"} />
+        <BigStat label="Class Rank" value={myRank ? `#${myRank}` : "-"} color="#3B82F6" sub={myClass?.name || "No class"} />
       </div>
 
       {/* Main 2-Column Panel Layout */}
@@ -43,7 +43,7 @@ function StudentHome({ user, db, assignments, classes, onOpenLesson, onTab }) {
           <div className="card">
             <SectionHeader title="Assignments from your teacher" eyebrow={`${assignments.length} active`} />
             <div style={{ display: "grid", gap: 10 }}>
-              {assignments.length === 0 && <div className="muted" style={{ padding: 16, textAlign: "center", fontWeight: 700 }}>No assignments — explore on your own!</div>}
+              {assignments.length === 0 && <div className="muted" style={{ padding: 16, textAlign: "center", fontWeight: 700 }}>No assignments - explore on your own!</div>}
               {assignments.map((a) => {
                 const lesson = window.findLesson(a.lessonId);
                 const teacher = window.DB.userById(db, a.assignedBy);
@@ -51,7 +51,7 @@ function StudentHome({ user, db, assignments, classes, onOpenLesson, onTab }) {
                 const daysLeft = Math.ceil((a.dueAt - Date.now()) / (1000 * 60 * 60 * 24));
                 const overdue = daysLeft < 0 && !done;
                 return (
-                  <div key={a.id} style={{ display: "grid", gridTemplateColumns: "auto 1fr auto", gap: 14, alignItems: "center", padding: "14px 16px", background: done ? "#D1FAE5" : "var(--bg-soft)", borderRadius: 12, border: overdue ? "1.5px solid #EF4444" : "1px solid transparent" }}>
+                  <div key={a.id} style={{ display: "grid", gridTemplateColumns: "auto 1fr auto", gap: 14, alignItems: "center", padding: "14px 16px", background: done ? "rgba(16,185,129,0.12)" : "var(--bg-soft)", borderRadius: 12, border: overdue ? "1.5px solid #EF4444" : done ? "1.5px solid rgba(16,185,129,0.45)" : "1px solid transparent" }}>
                     <div style={{ width: 48, height: 48, borderRadius: 12, background: lesson?.color + "22", display: "grid", placeItems: "center", fontFamily: "var(--font-display)", fontWeight: 800, color: lesson?.color }}>
                       {done ? "✓" : daysLeft < 0 ? "!" : daysLeft}
                     </div>
@@ -63,7 +63,7 @@ function StudentHome({ user, db, assignments, classes, onOpenLesson, onTab }) {
                       {a.note && <div className="muted" style={{ fontSize: 11, fontStyle: "italic", marginTop: 2 }}>"{a.note}"</div>}
                     </div>
                     {!done && (
-                      <button className="btn" style={{ background: lesson?.color, color: "white", padding: "8px 16px", fontSize: 13 }} onClick={() => onOpenLesson(a.lessonId)}>Start →</button>
+                      <button className="btn" style={{ background: lesson?.color, color: window.readableTextOn(lesson?.color), padding: "8px 16px", fontSize: 13 }} onClick={() => onOpenLesson(a.lessonId)}>Start →</button>
                     )}
                   </div>
                 );
@@ -114,12 +114,12 @@ function ClassFeed({ db, myClass, userId }) {
         else if (e.kind === "streak") line = `is on a ${e.payload.days}-day streak`;
         else line = "did something";
         return (
-          <div key={i} style={{ display: "flex", gap: 10, alignItems: "center", padding: "8px 10px", borderRadius: 10, background: isMe ? "#FEF3C7" : "var(--bg-soft)", color: isMe ? "#78350F" : "inherit" }}>
+          <div key={i} style={{ display: "flex", gap: 10, alignItems: "center", padding: "8px 10px", borderRadius: 10, background: isMe ? "rgba(245,158,11,0.15)" : "var(--bg-soft)", color: isMe ? "var(--ink)" : "inherit", border: isMe ? "1px solid rgba(245,158,11,0.45)" : "1px solid transparent" }}>
             <div style={{ width: 30, height: 30, borderRadius: 99, background: "var(--bg-card)", display: "grid", placeItems: "center", fontSize: 15, color: "var(--ink)" }}>{avatarMap[u.avatar] || "🎓"}</div>
             <div style={{ flex: 1, fontSize: 12, fontWeight: 700 }}>
-              <b>{isMe ? "You" : u.name.split(" ")[0]}</b> <span style={{ fontWeight: 600, color: isMe ? "#92400E" : "var(--ink-soft)" }}>{line}</span>
+              <b>{isMe ? "You" : u.name.split(" ")[0]}</b> <span style={{ fontWeight: 600, color: isMe ? "#FBBF24" : "var(--ink-soft)" }}>{line}</span>
             </div>
-            <div className={isMe ? "" : "muted"} style={{ fontSize: 10, fontWeight: 700, color: isMe ? "#B45309" : undefined }}>{ago}</div>
+            <div className={isMe ? "" : "muted"} style={{ fontSize: 10, fontWeight: 700, color: isMe ? "#FBBF24" : undefined }}>{ago}</div>
           </div>
         );
       })}
@@ -140,7 +140,7 @@ function QuestCard({ quest, user }) {
   const done = progress >= quest.goal;
   const pct = Math.min(100, Math.round((progress / quest.goal) * 100));
   return (
-    <div style={{ padding: 14, background: done ? "linear-gradient(135deg, #D1FAE5, #A7F3D0)" : "var(--bg-soft)", borderRadius: 12, border: done ? "2px solid #10B981" : "1px solid transparent" }}>
+    <div style={{ padding: 14, background: done ? "rgba(16,185,129,0.12)" : "var(--bg-soft)", borderRadius: 12, border: done ? "2px solid #34D399" : "1px solid transparent" }}>
       <div style={{ display: "flex", alignItems: "start", gap: 8, marginBottom: 8 }}>
         <div style={{ fontSize: 22 }}>{done ? "✅" : "🎯"}</div>
         <div style={{ flex: 1 }}>
@@ -150,7 +150,7 @@ function QuestCard({ quest, user }) {
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, fontWeight: 800, marginBottom: 4 }}>
         <span>{progress} / {quest.goal}</span>
-        <span style={{ color: done ? "#10B981" : "var(--ink-mute)" }}>{done ? "Done" : `${pct}%`}</span>
+        <span style={{ color: done ? "#34D399" : "var(--ink-mute)" }}>{done ? "Done" : `${pct}%`}</span>
       </div>
       <div style={{ height: 6, background: "var(--line)", borderRadius: 99, overflow: "hidden" }}>
         <div style={{ height: "100%", width: `${pct}%`, background: done ? "#10B981" : "#A855F7", transition: "width 0.4s" }} />
@@ -216,7 +216,7 @@ function Locker({ user, onUpdate }) {
         <div className="eyebrow">Your locker</div>
         <h1>Cosmetics & rewards</h1>
         <p className="soft" style={{ maxWidth: 540, marginTop: 6 }}>
-          Unlock items from mystery boxes after lessons. Equip them to show off — purely cosmetic, no advantage in learning.
+          Unlock items from mystery boxes after lessons. Equip them to show off - purely cosmetic, no advantage in learning.
         </p>
       </div>
 

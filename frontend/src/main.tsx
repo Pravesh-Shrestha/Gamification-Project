@@ -8,6 +8,7 @@ import "./logic/index";
 export { AuthProvider, useAuth } from "./context/AuthContext";
 
 // ── UI Components (Feature & Shared Organized) ─────────────
+import "./components/shared/LoadingScreen";
 import "./components/shared/TweaksPanel";
 import "./components/shared/Components";
 import "./components/shared/RoleShell";

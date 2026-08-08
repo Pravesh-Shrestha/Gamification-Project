@@ -43,7 +43,7 @@ const CURRICULUM = [
             slides: [
               { kind: "intro", body: "A fraction shows a part of a whole. The top number (numerator) counts the parts you have. The bottom number (denominator) shows how many parts the whole is split into." },
               { kind: "example", body: "Imagine a pizza cut into 4 equal slices. If you eat 1 slice, you've eaten 1/4 of the pizza.", visual: "pizza" },
-              { kind: "tip", body: "When the numerator and denominator are equal (like 4/4), the fraction equals 1 — a whole." },
+              { kind: "tip", body: "When the numerator and denominator are equal (like 4/4), the fraction equals 1 - a whole." },
             ],
             quiz: [
               { kind: "mcq", q: "A cake is cut into 8 equal slices. You eat 3. What fraction did you eat?", choices: ["3/5", "3/8", "8/3", "5/8"], answer: 1 },
@@ -56,7 +56,7 @@ const CURRICULUM = [
             slides: [
               { kind: "intro", body: "To add fractions with the same denominator, add the numerators and keep the denominator the same." },
               { kind: "example", body: "1/5 + 2/5 = 3/5. The bottom number stays as 5.", visual: "blocks" },
-              { kind: "tip", body: "If denominators are different, you'll need to find a common denominator first — coming up next!" },
+              { kind: "tip", body: "If denominators are different, you'll need to find a common denominator first - coming up next!" },
             ],
             quiz: [
               { kind: "mcq", q: "What is 2/7 + 3/7?", choices: ["5/14", "6/7", "5/7", "1/7"], answer: 2 },
@@ -116,7 +116,7 @@ const CURRICULUM = [
             slides: [
               { kind: "intro", body: "Shapes are everywhere! A shape is defined by its sides and corners (vertices)." },
               { kind: "example", body: "A triangle has 3 sides and 3 corners. A square has 4 equal sides and 4 corners.", visual: "shapes" },
-              { kind: "tip", body: "The word 'geometry' comes from Greek — 'geo' (earth) and 'metron' (measure)." },
+              { kind: "tip", body: "The word 'geometry' comes from Greek - 'geo' (earth) and 'metron' (measure)." },
             ],
             quiz: [
               { kind: "mcq", q: "How many sides does a triangle have?", choices: ["2", "3", "4", "5"], answer: 1 },
@@ -138,7 +138,7 @@ const CURRICULUM = [
             slides: [
               { kind: "intro", body: "A plant has four main parts: roots, stem, leaves, and flowers. Each part has a special job." },
               { kind: "example", body: "Roots anchor the plant and drink water from the soil. Leaves make food using sunlight.", visual: "plant" },
-              { kind: "tip", body: "The stem is like a highway — it carries water and nutrients between roots and leaves." },
+              { kind: "tip", body: "The stem is like a highway - it carries water and nutrients between roots and leaves." },
             ],
             quiz: [
               { kind: "mcq", q: "Which part of a plant absorbs water from the soil?", choices: ["Leaves", "Stem", "Roots", "Flowers"], answer: 2 },
@@ -442,7 +442,7 @@ async function main() {
           },
         });
       }
-      console.log(`  ✅ Chapter "${chapterData.title}" — ${chapterData.lessons.length} lessons`);
+      console.log(`  ✅ Chapter "${chapterData.title}" - ${chapterData.lessons.length} lessons`);
     }
   }
   console.log(`  ✅ Curriculum seeded (${CURRICULUM.length} subjects)`);

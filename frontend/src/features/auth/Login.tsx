@@ -24,8 +24,29 @@ function Login({ onLogin, onBack }) {
     }
   }
 
+  if (loading) {
+    const CodedexLoadingScreen = (window as any).CodedexLoadingScreen;
+    if (CodedexLoadingScreen) {
+      return <CodedexLoadingScreen message="Authenticating & entering your adventure..." />;
+    }
+  }
+
   return (
     <div className="login-wrapper">
+      {/* Looping Background Video */}
+      <div className="login-video-bg-wrap">
+        <video
+          src="/assets/banner.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="login-video-bg"
+          onError={(e) => { e.currentTarget.style.display = "none"; }}
+        />
+        <div className="login-video-overlay" />
+      </div>
+
       {/* Scattered background shapes */}
       <LoginShapes />
 
@@ -34,58 +55,62 @@ function Login({ onLogin, onBack }) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
         className="login-card"
+        style={{ background: "#131728", border: "1px solid #22273E", boxShadow: "0 20px 50px rgba(0,0,0,0.65)" }}
       >
         {/* ── Left: Branding Panel ─────────────────────── */}
-        <div className="login-brand-panel">
+        <div className="login-brand-panel" style={{ background: "linear-gradient(135deg, #1C0A35 0%, #35136B 50%, #15092B 100%)" }}>
           <LoginPanelShapes />
           <div style={{ position: "relative", zIndex: 1 }}>
-            <div style={{ marginBottom: 36 }}><Logo size={40} light /></div>
-            <h1 style={{ fontSize: 36, lineHeight: 1.1, fontWeight: 900, marginBottom: 12, color: "#FAF7F2" }}>
+            <div style={{ marginBottom: 36, display: "flex", alignItems: "center", gap: 10 }}>
+              <div className="font-pixel" style={{ width: 36, height: 36, borderRadius: 8, background: "#FFC700", color: "#0B0D17", display: "grid", placeItems: "center", fontWeight: 900, fontSize: 18 }}>a</div>
+              <span className="font-pixel-sans" style={{ color: "#FFF", fontWeight: 800, fontSize: 22 }}>academia.io</span>
+            </div>
+            <h1 className="font-pixel-sans" style={{ fontSize: 32, lineHeight: 1.15, fontWeight: 900, marginBottom: 12, color: "#FAF7F2" }}>
               Unlock Your{" "}
-              <span style={{ background: "linear-gradient(135deg, #EC4899, #F59E0B)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                Potential.
+              <span style={{ color: "#FFC700", textShadow: "0 0 12px rgba(255,199,0,0.4)" }}>
+                Adventure.
               </span>
             </h1>
-            <p style={{ color: "rgba(250,247,242,0.7)", fontSize: 15, fontWeight: 600, maxWidth: 340, lineHeight: 1.6, marginBottom: 0 }}>
+            <p style={{ color: "rgba(250,247,242,0.75)", fontSize: 14, fontWeight: 600, maxWidth: 340, lineHeight: 1.6, marginBottom: 0 }}>
               The interactive workspace for gamified learning, progress tracking, and achievement unlocking.
             </p>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 12, position: "relative", zIndex: 1, marginTop: 28 }}>
-            <motion.div whileHover={{ scale: 1.02 }} className="login-feature-pill">
-              <div className="pill-icon" style={{ background: "rgba(236, 72, 153, 0.2)", color: "#F472B6" }}>
+            <motion.div whileHover={{ scale: 1.02 }} className="login-feature-pill" style={{ background: "rgba(255, 199, 0, 0.1)", border: "1px solid rgba(255, 199, 0, 0.25)" }}>
+              <div className="pill-icon" style={{ background: "rgba(255, 199, 0, 0.2)", color: "#FFC700" }}>
                 <Target size={20} />
               </div>
               <div>
-                <div className="pill-title">Personalized Dashboard Routing</div>
-                <div className="pill-desc">Auto-redirects you to your student workspace, teacher panel, or admin console.</div>
+                <div className="pill-title font-pixel-sans" style={{ color: "#FFF" }}>Personalized Workspace Routing</div>
+                <div className="pill-desc" style={{ color: "#9CA3AF" }}>Auto-redirects you to your student workspace, teacher panel, or admin console.</div>
               </div>
             </motion.div>
-            <motion.div whileHover={{ scale: 1.02 }} className="login-feature-pill">
-              <div className="pill-icon" style={{ background: "rgba(16, 185, 129, 0.2)", color: "#34D399" }}>
+            <motion.div whileHover={{ scale: 1.02 }} className="login-feature-pill" style={{ background: "rgba(56, 189, 248, 0.1)", border: "1px solid rgba(56, 189, 248, 0.25)" }}>
+              <div className="pill-icon" style={{ background: "rgba(56, 189, 248, 0.2)", color: "#38BDF8" }}>
                 <Trophy size={20} />
               </div>
               <div>
-                <div className="pill-title">Gamified Progress Tracking</div>
-                <div className="pill-desc">Earn XP, unlock badges, and compete on leaderboards as you learn and grow.</div>
+                <div className="pill-title font-pixel-sans" style={{ color: "#FFF" }}>Gamified Progress Tracking</div>
+                <div className="pill-desc" style={{ color: "#9CA3AF" }}>Earn XP, unlock badges, and compete on leaderboards as you learn and grow.</div>
               </div>
             </motion.div>
           </div>
         </div>
 
         {/* ── Right: Sign-in Form ──────────────────────── */}
-        <div className="login-form-panel">
+        <div className="login-form-panel" style={{ background: "#131728" }}>
           <div>
-            <h2 style={{ fontSize: 30, fontWeight: 900, marginBottom: 8, color: "var(--ink)" }}>Welcome Back</h2>
-            <p style={{ fontSize: 14, color: "var(--ink-soft)", fontWeight: 600, marginTop: 0, marginBottom: 28 }}>
+            <h2 className="font-pixel-sans" style={{ fontSize: 28, fontWeight: 900, marginBottom: 8, color: "#FFFFFF" }}>Welcome Back</h2>
+            <p style={{ fontSize: 14, color: "#9CA3AF", fontWeight: 500, marginTop: 0, marginBottom: 28 }}>
               Sign in to continue exploring your personalized interactive learning space.
             </p>
           </div>
 
           <form onSubmit={handleLogin}>
             <div className="login-input-group">
-              <label>Email Address</label>
-              <span className="input-icon" style={{ color: "var(--ink-mute)" }}><Mail size={18} /></span>
+              <label style={{ color: "#D1D5DB" }}>Email Address</label>
+              <span className="input-icon" style={{ color: "#9CA3AF" }}><Mail size={18} /></span>
               <input
                 type="email"
                 value={email}
@@ -93,12 +118,13 @@ function Login({ onLogin, onBack }) {
                 placeholder="name@school.edu"
                 disabled={loading}
                 autoComplete="email"
+                style={{ background: "#1B2035", border: "1px solid #22273E", color: "#FFF" }}
               />
             </div>
 
             <div className="login-input-group" style={{ position: "relative" }}>
-              <label>Password</label>
-              <span className="input-icon" style={{ color: "var(--ink-mute)" }}><Lock size={18} /></span>
+              <label style={{ color: "#D1D5DB" }}>Password</label>
+              <span className="input-icon" style={{ color: "#9CA3AF" }}><Lock size={18} /></span>
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
@@ -106,13 +132,14 @@ function Login({ onLogin, onBack }) {
                 placeholder="Enter your password"
                 disabled={loading}
                 autoComplete="current-password"
+                style={{ background: "#1B2035", border: "1px solid #22273E", color: "#FFF" }}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 style={{
                   position: "absolute", right: 14, bottom: 12,
-                  color: "var(--ink-mute)", fontWeight: 700,
+                  color: "#9CA3AF", fontWeight: 700,
                   background: "none", border: "none", cursor: "pointer",
                 }}
                 tabIndex={-1}
@@ -127,28 +154,28 @@ function Login({ onLogin, onBack }) {
                 animate={{ opacity: 1, y: 0 }}
                 style={{
                   color: "#EF4444", fontSize: 13, fontWeight: 700, marginBottom: 16,
-                  padding: "10px 14px", borderRadius: 10, background: "rgba(239,68,68,0.08)",
-                  border: "1px solid rgba(239,68,68,0.15)",
+                  padding: "10px 14px", borderRadius: 10, background: "rgba(239,68,68,0.12)",
+                  border: "1px solid rgba(239,68,68,0.3)",
                 }}
               >
                 {error}
               </motion.div>
             )}
 
-            <motion.button
-              whileHover={{ scale: loading ? 1 : 1.02 }}
-              whileTap={{ scale: loading ? 1 : 0.98 }}
+            <button
               type="submit"
-              className="btn-gradient"
+              className="pixel-btn"
               disabled={loading}
               style={{
-                width: "100%", fontSize: 15, padding: "14px 24px",
-                letterSpacing: "0.04em", textTransform: "uppercase",
+                width: "100%",
+                fontSize: 13,
+                padding: "14px 24px",
                 opacity: loading ? 0.6 : 1,
+                justifyContent: "center"
               }}
             >
-              {loading ? "Signing in..." : "Sign In"}
-            </motion.button>
+              {loading ? "Signing in..." : "Sign In 🎮"}
+            </button>
           </form>
 
           {onBack && (
@@ -157,7 +184,7 @@ function Login({ onLogin, onBack }) {
                 onClick={onBack}
                 style={{
                   display: "inline-flex", alignItems: "center", gap: 6,
-                  fontSize: 13, fontWeight: 700, color: "var(--primary)",
+                  fontSize: 13, fontWeight: 700, color: "#FFC700",
                   background: "none", border: "none", cursor: "pointer",
                 }}
               >
@@ -166,8 +193,8 @@ function Login({ onLogin, onBack }) {
             </div>
           )}
 
-          <div style={{ marginTop: 28, paddingTop: 18, borderTop: "1px solid var(--line)" }}>
-            <div style={{ fontSize: 11, fontWeight: 600, color: "var(--ink-mute)", lineHeight: 1.65, textAlign: "center" }}>
+          <div style={{ marginTop: 28, paddingTop: 18, borderTop: "1px solid #22273E" }}>
+            <div style={{ fontSize: 11, fontWeight: 600, color: "#6B7280", lineHeight: 1.65, textAlign: "center" }}>
               Accounts are created by school administrators. Contact your school admin for access. All data encrypted in transit and at rest.
             </div>
           </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { GraduationCap, Cat, Dog, Rabbit, Bird, Bot, Smile, Star, Flame } from "lucide-react";
 
-// academia.io — Shared UI components
+// academia.io - Shared UI components
 
 function ProgressRing({ size = 80, stroke = 8, pct = 0, color = "var(--ink)", label }) {
   const r = (size - stroke) / 2;
@@ -46,11 +46,11 @@ function ProgressRing({ size = 80, stroke = 8, pct = 0, color = "var(--ink)", la
 
 function StatTile({ label, value, sub, color }) {
   return (
-    <div className="card card-tight" style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-      <div className="eyebrow">{label}</div>
+    <div className="card card-tight pixel-box" style={{ display: "flex", flexDirection: "column", gap: 4, background: "var(--bg-card)" }}>
+      <div className="eyebrow font-pixel-sans" style={{ color: "var(--ink-soft)" }}>{label}</div>
       <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
-        <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 32, color: color || "var(--ink)" }}>{value}</div>
-        {sub && <div className="muted" style={{ fontSize: 13, fontWeight: 700 }}>{sub}</div>}
+        <div className="font-pixel" style={{ fontWeight: 900, fontSize: 24, color: color || "var(--primary)" }}>{value}</div>
+        {sub && <div className="muted" style={{ fontSize: 12, fontWeight: 700, color: "var(--ink-mute)" }}>{sub}</div>}
       </div>
     </div>
   );
@@ -58,22 +58,20 @@ function StatTile({ label, value, sub, color }) {
 
 export function Logo({ size = 36, light = false }) {
   return (
-    <div className="brand" onClick={() => window.dispatchEvent(new CustomEvent("aio:nav", { detail: "home" }))} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-      <div style={{
+    <div className="brand" onClick={() => window.dispatchEvent(new CustomEvent("aio:nav", { detail: "home" }))} style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}>
+      <div className="font-pixel" style={{
         width: size,
         height: size,
-        borderRadius: size * 0.35,
-        background: "var(--gradient-brand)",
+        borderRadius: 8,
+        background: "#FFC700",
         display: "grid",
         placeItems: "center",
-        color: "white",
-        fontWeight: 800,
+        color: "#0B0D17",
+        fontWeight: 900,
         fontSize: size * 0.6,
-        fontFamily: "var(--font-display)",
-        boxShadow: "0 4px 12px rgba(43, 27, 122, 0.25)",
-        transform: "rotate(-4deg)"
+        boxShadow: "0 0 16px rgba(255, 199, 0, 0.4)",
       }}>a</div>
-      <span className="brand-text" style={{ fontSize: (size - 4) * 0.55, color: light ? "white" : "inherit", fontFamily: "var(--font-display)", fontWeight: 700 }}>academia.io</span>
+      <span className="brand-text font-pixel-sans" style={{ fontSize: size * 0.55, color: light ? "white" : "inherit", fontWeight: 800 }}>academia.io</span>
     </div>
   );
 }

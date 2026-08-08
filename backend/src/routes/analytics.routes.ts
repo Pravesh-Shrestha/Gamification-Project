@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Student Performance Analytics
+// academia.io - Student Performance Analytics
 // ============================================================
 
 import { Router } from "express";
@@ -9,6 +9,7 @@ import {
   getLessonSummaries,
   getMLInsights,
   getClassClusters,
+  getMLMetricsController,
 } from "../controllers/analytics.controller.js";
 
 const router = Router();
@@ -23,7 +24,11 @@ router.get("/summaries", getLessonSummaries as any);
 // ── ML Predictions / Flow State Recommender ────────────────
 router.get("/ml-insights", getMLInsights as any);
 
+// ── ML Model Validation Metrics (Research Analytics) ───────
+router.get("/ml-metrics", getMLMetricsController as any);
+
 // ── ML Class-wide K-Means Clustering (Teacher/Admin view) ───
 router.get("/class-clusters", getClassClusters as any);
 
 export default router;
+

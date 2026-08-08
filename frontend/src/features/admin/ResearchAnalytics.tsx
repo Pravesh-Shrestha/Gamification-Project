@@ -2,6 +2,7 @@ import React from "react";
 import { getToken } from "../../services/api";
 import { ResearchKPIs } from "./components/ResearchKPIs";
 import { HypothesisPanel } from "./components/HypothesisPanel";
+import { MLDiagnosticsPanel } from "./components/MLDiagnosticsPanel";
 import { ScatterChart } from "./components/ScatterChart";
 import { EngagementCharts, XPTrendChart, ActiveStudentsChart, RiskDistributionChart } from "./components/EngagementCharts";
 import { ChartModal } from "./components/ChartModal";
@@ -114,6 +115,10 @@ export default function ResearchAnalytics() {
 
       {/* Thesis Hypothesis Testing Panel */}
       <HypothesisPanel stats={data.hypothesisStats} />
+
+      {/* Scikit-Learn ML Model Validation Diagnostics */}
+      <MLDiagnosticsPanel />
+
 
       {/* Visualizations: Scatter Plot & Trend Line Side-by-Side */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(450px, 1fr))", gap: 24 }}>

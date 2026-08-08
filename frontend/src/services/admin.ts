@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — Admin API Client (User Management)
+// academia.io - Admin API Client (User Management)
 // ============================================================
 // Super Admin → creates School Admins
 // Admin       → creates Teachers & Students

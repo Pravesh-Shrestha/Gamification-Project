@@ -78,8 +78,8 @@ export function LeaderboardTable({ leaderboard, maxXp }: LeaderboardTableProps) 
                   </div>
                 </td>
                 <td style={{ padding: "12px 14px" }}><span style={{ color: "#A78BFA", fontWeight: 700 }}>Lv {s.level}</span></td>
-                <td style={{ padding: "12px 14px" }}>{s.streak > 0 ? `🔥 ${s.streak}d` : "—"}</td>
-                <td style={{ padding: "12px 14px" }}>{s.badges > 0 ? `🏅 ${s.badges}` : "—"}</td>
+                <td style={{ padding: "12px 14px" }}>{s.streak > 0 ? `🔥 ${s.streak}d` : "-"}</td>
+                <td style={{ padding: "12px 14px" }}>{s.badges > 0 ? `🏅 ${s.badges}` : "-"}</td>
                 <td style={{ padding: "12px 14px" }}>{s.lessons}</td>
               </tr>
             ))}

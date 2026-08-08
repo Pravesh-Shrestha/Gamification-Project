@@ -88,8 +88,8 @@ function StudentStats() {
 
         {ml && (
           <div className="card" style={{ padding: 24, background: "linear-gradient(135deg, rgba(108,60,225,0.06), rgba(236,72,153,0.06))", borderColor: "rgba(108,60,225,0.15)" }}>
-            <div className="eyebrow" style={{ color: "var(--primary)" }}>AI Learning Coach</div>
-            <h3 style={{ margin: "0 0 12px" }}>ML Flow Diagnostics</h3>
+            <div className="eyebrow" style={{ color: "var(--primary)" }}>🧠 ML Predictive Analytics</div>
+            <h3 style={{ margin: "0 0 12px" }}>Flow Diagnostics (local ML engine)</h3>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 14 }}>
               <div style={{ padding: "8px 12px", background: "var(--bg-card)", borderRadius: 10, border: "1px solid var(--line)" }}>
                 <span className="muted" style={{ fontSize: 10, fontWeight: 800, textTransform: "uppercase" }}>Flow Zone</span>
@@ -101,7 +101,7 @@ function StudentStats() {
               </div>
             </div>
             <p style={{ margin: 0, fontSize: 13, lineHeight: 1.5, fontWeight: 600, color: "var(--ink-soft)" }}>
-              🤖 <b>AI Diagnostic</b>: {ml.recommendation}
+              🧠 <b>ML Recommendation</b>: {ml.recommendation}
             </p>
           </div>
         )}

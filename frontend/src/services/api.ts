@@ -1,5 +1,5 @@
 // ============================================================
-// academia.io — API Client
+// academia.io - API Client
 // ============================================================
 // Centralized fetch wrapper with JWT token management.
 // All API calls go through this module.
@@ -45,7 +45,7 @@ export function setToken(token) {
 }
 
 /**
- * Core fetch wrapper — adds auth header, handles errors
+ * Core fetch wrapper - adds auth header, handles errors
  */
 async function request(endpoint, options: any = {}) {
   const url = `${API_BASE}${endpoint}`;
